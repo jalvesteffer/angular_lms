@@ -6,6 +6,7 @@ import { LibrarianComponent } from "./librarian/librarian.component";
 import { HomeComponent } from "./home/home.component";
 import { LmserrorComponent } from "./lmserror/lmserror.component";
 import { LayoutComponent } from "./layout/layout.component";
+import { AuthorComponent } from "./administrator/author/author.component";
 
 
 const routes: Routes = [
@@ -25,6 +26,10 @@ const routes: Routes = [
       {
         path: "lms/admin",
         component: AdministratorComponent,
+      },
+      {
+        path: "lms/admin/author",
+        component: AuthorComponent,
       },
       {
         path: "lms/borrower",
