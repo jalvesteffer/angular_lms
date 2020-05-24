@@ -1,0 +1,25 @@
+<div class="container marketing">
+  <h2>Total number of Publishers in LMS are {{ totalPublishers }} as of {{ today | date: "short" }}</h2>
+  <table class="table table-bordered table-dark">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Address</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of publishers; let i = index">
+        <th scope="row">{{ i+1 }}</th>
+        <td>{{ p.publisherName }}</td>
+        <td>{{ p.publisherAddress }}</td>
+        <td>{{ p.publisherPhone }}</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

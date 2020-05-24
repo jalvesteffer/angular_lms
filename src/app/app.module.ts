@@ -15,6 +15,10 @@ import { LmserrorComponent } from './lmserror/lmserror.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
+import { PublisherComponent } from './administrator/publisher/publisher.component';
+import { BranchComponent } from './administrator/branch/branch.component';
+import { GenreComponent } from './administrator/genre/genre.component';
+import { LoanComponent } from './administrator/loan/loan.component';
 
 @NgModule({
 
@@ -26,10 +30,14 @@ import { FooterComponent } from './layout/footer/footer.component';
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    BorrowerComponent,
+    LibrarianComponent,
     AuthorComponent,
     BookComponent,
-    LibrarianComponent
+    PublisherComponent,
+    GenreComponent,
+    BorrowerComponent,
+    BranchComponent,
+    LoanComponent
   ],
   imports: [
     BrowserModule,

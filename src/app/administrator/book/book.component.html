@@ -1,3 +1,27 @@
-<p>
-  book works!
-</p>
+<div class="container marketing">
+  <h2>Total number of Books in LMS are {{ totalBooks }} as of {{ today | date: "short" }}</h2>
+  <table class="table table-bordered table-dark">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Author(s)</th>
+        <th scope="col">Publisher</th>
+        <th scope="col">Genre(s)</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let b of books; let i = index">
+        <th scope="row">{{ i+1 }}</th>
+        <td>{{ b.title }}</td>
+        <td>{{ b.authors }}</td>
+        <td>{{ b.publisher }}</td>
+        <td>{{ b.genres }}</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
