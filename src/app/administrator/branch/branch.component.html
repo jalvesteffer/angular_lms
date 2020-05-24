@@ -1,3 +1,25 @@
-<p>
-  branch works!
-</p>
+<div class="container marketing">
+  <h2>Total number of Branches in LMS are {{ totalBranches }} as of {{ today | date: "short" }}</h2>
+  <table class="table table-bordered table-dark">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Address</th>
+        <th scope="col"></th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let b of branches; let i = index">
+        <th scope="row">{{ i+1 }}</th>
+        <td>{{ b.branchName }}</td>
+        <td>{{ b.branchAddress }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

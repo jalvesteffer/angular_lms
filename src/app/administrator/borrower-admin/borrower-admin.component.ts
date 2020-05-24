@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-borrower',
-  templateUrl: './borrower.component.html',
-  styleUrls: ['./borrower.component.css']
+  selector: 'app-borrower-admin',
+  templateUrl: './borrower-admin.component.html',
+  styleUrls: ['./borrower-admin.component.css']
 })
-export class BorrowerComponent implements OnInit {
+export class BorrowerAdminComponent implements OnInit {
 
   totalBorrowers: number;
   borrowers: any;

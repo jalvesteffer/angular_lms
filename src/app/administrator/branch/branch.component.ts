@@ -15,6 +15,18 @@ export class BranchComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
+    this.loadAllBranches();
   }
 
+  loadAllBranches() {
+    this.http.get('http://localhost:3000/lms/admin/branches')
+      .subscribe((res) => {
+        this.branches = res;
+        this.totalBranches = this.branches.length;
+      },
+        (error) => {
+          ;
+        }
+      );
+  }
 }

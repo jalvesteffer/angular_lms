@@ -10,6 +10,7 @@ import { AuthorComponent } from "./administrator/author/author.component";
 import { BookComponent } from './administrator/book/book.component';
 import { PublisherComponent } from './administrator/publisher/publisher.component';
 import { GenreComponent } from './administrator/genre/genre.component';
+import { BorrowerAdminComponent } from "./administrator/borrower-admin/borrower-admin.component";
 import { BranchComponent } from './administrator/branch/branch.component';
 import { LoanComponent } from './administrator/loan/loan.component';
 
@@ -50,7 +51,7 @@ const routes: Routes = [
       },
       {
         path: "lms/admin/borrower",
-        component: BorrowerComponent,
+        component: BorrowerAdminComponent,
       },
       {
         path: "lms/admin/branch",

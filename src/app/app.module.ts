@@ -19,6 +19,7 @@ import { PublisherComponent } from './administrator/publisher/publisher.componen
 import { BranchComponent } from './administrator/branch/branch.component';
 import { GenreComponent } from './administrator/genre/genre.component';
 import { LoanComponent } from './administrator/loan/loan.component';
+import { BorrowerAdminComponent } from './administrator/borrower-admin/borrower-admin.component';
 
 @NgModule({
 
@@ -37,7 +38,8 @@ import { LoanComponent } from './administrator/loan/loan.component';
     GenreComponent,
     BorrowerComponent,
     BranchComponent,
-    LoanComponent
+    LoanComponent,
+    BorrowerAdminComponent
   ],
   imports: [
     BrowserModule,

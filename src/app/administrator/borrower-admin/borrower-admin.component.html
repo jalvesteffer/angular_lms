@@ -4,7 +4,7 @@
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Name</th>
+        <th scope="col">Borrower</th>
         <th scope="col">Address</th>
         <th scope="col">Phone</th>
         <th scope="col">Edit</th>
@@ -14,9 +14,9 @@
     <tbody>
       <tr *ngFor="let b of borrowers; let i = index">
         <th scope="row">{{ i+1 }}</th>
-        <td>{{ b.borrowerName }}</td>
-        <td>{{ b.borrowerAddress }}</td>
-        <td>{{ b.borrowerPhone }}</td>
+        <td>{{ b.name }}</td>
+        <td>{{ b.address }}</td>
+        <td>{{ b.phone }}</td>
         <td></td>
         <td></td>
       </tr>
