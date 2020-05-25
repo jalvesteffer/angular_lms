@@ -20,6 +20,7 @@ import { BranchComponent } from './administrator/branch/branch.component';
 import { GenreComponent } from './administrator/genre/genre.component';
 import { LoanComponent } from './administrator/loan/loan.component';
 import { BorrowerAdminComponent } from './administrator/borrower-admin/borrower-admin.component';
+import { LmsService } from "./common/services/lms.service";
 
 @NgModule({
 
@@ -47,7 +48,7 @@ import { BorrowerAdminComponent } from './administrator/borrower-admin/borrower-
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [LmsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,23 +1,23 @@
 <div class="container marketing">
   <h2>Total number of Authors in LMS are {{ totalAuthors }} as of {{ today | date: "short" }}</h2>
+  <h3><button type="button" class="btn btn-primary">Add Author</button></h3>
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col">Author Name</th>
         <th scope="col">Books Written</th>
-        <th scope="col">Edit</th>
-        <th scope="col">Delete</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let a of authors; let i = index">
         <th scope="row">{{ i+1 }}</th>
         <td>{{ a.authorName }}</td>
-        <td></td>
-        <!-- <td><span *ngFor="let b of </td> -->
-        <td></td>
-        <td></td>
+        <td><span *ngFor="let b of a.books; let isLast=last">{{ b.title }}{{isLast ? '' : ', '}} </span></td>
+        <td><button type="button" class="btn btn-secondary">Edit</button></td>
+        <td><button type="button" class="btn btn-danger" (click)="deleteAuthor(a.authorId)">Delete</button></td>
       </tr>
     </tbody>
   </table>

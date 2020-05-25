@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { LmsService } from "../../common/services/lms.service";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: 'app-author',
@@ -12,7 +13,7 @@ export class AuthorComponent implements OnInit {
   authors: any;
   today = new Date();
 
-  constructor(private http: HttpClient) { }
+  constructor(private lmsService: LmsService) { }
 
   ngOnInit() {
     this.loadAllAuthors();
@@ -21,10 +22,22 @@ export class AuthorComponent implements OnInit {
   ngAfterViewInit() { }
 
   loadAllAuthors() {
-    this.http.get('http://localhost:3000/lms/admin/authors')
+    this.lmsService.getAll(`${environment.appUrl}${environment.readAuthorsURI}`)
       .subscribe((res) => {
         this.authors = res;
         this.totalAuthors = this.authors.length;
+      },
+        (error) => {
+          ;
+        }
+      );
+  }
+
+  deleteAuthor(authorId) {
+
+    this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteAuthorsURI}`, authorId)
+      .subscribe((res) => {
+        this.loadAllAuthors();
       },
         (error) => {
           ;
