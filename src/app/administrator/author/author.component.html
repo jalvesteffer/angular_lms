@@ -1,10 +1,10 @@
 <div class="container marketing">
   <h2>Total number of Authors in LMS are {{ totalAuthors }} as of {{ today | date: "short" }}</h2>
-  <h3><button type="button" class="btn btn-primary">Add Author</button></h3>
+  <h3><button type="button" class="btn btn-primary" (click)="open(updateAuthorModal, null)">Add Author</button></h3>
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
-        <th scope="col">#</th>
+        <th scope="col"></th>
         <th scope="col">Author Name</th>
         <th scope="col">Books Written</th>
         <th scope="col"></th>
@@ -16,9 +16,74 @@
         <th scope="row">{{ i+1 }}</th>
         <td>{{ a.authorName }}</td>
         <td><span *ngFor="let b of a.books; let isLast=last">{{ b.title }}{{isLast ? '' : ', '}} </span></td>
-        <td><button type="button" class="btn btn-secondary">Edit</button></td>
+        <td><button type="button" class="btn btn-secondary" (click)="(open(updateAuthorModal, a))">Edit</button></td>
         <td><button type="button" class="btn btn-danger" (click)="deleteAuthor(a.authorId)">Delete</button></td>
       </tr>
     </tbody>
   </table>
 </div>
+
+
+<!-- <ng-template #updateAuthorModal let-c="close" let-d="dismiss">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Author</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Name: <input type="text" [(ngModel)]="selectedObj.authorName" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="c()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="updateAuthor()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</ng-template> -->
+
+<ng-template #updateAuthorModal let-c="close" let-d="dismiss">
+  <form [formGroup]="updateAuthorForm">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Author</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            Enter Author Name:
+            <input class="form-control" id="authorName" formControlName="authorName" [ngClass]="{
+                'is-invalid': updateAuthorForm.controls['authorName'].errors
+              }" />
+            <div *ngIf="updateAuthorForm.controls['authorName'].errors" class="error-msg">
+              <div [hidden]="
+                  !updateAuthorForm.controls['authorName'].errors.required
+                ">
+                Author Name is required
+              </div>
+              <div [hidden]="
+                  updateAuthorForm.controls['authorName'].errors.maxLength ||
+                  updateAuthorForm.controls['authorName'].errors.minLength
+                ">
+                Author Name should be between 3-45 chars in length
+              </div>
+            </div>
+            <ng-multiselect-dropdown [placeholder]="'Select Books(s)'" [data]="totalBooks" formControlName="books"
+              [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">
+            </ng-multiselect-dropdown>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="c()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="updateAuthor()"
+            [disabled]="updateAuthorForm.invalid">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>

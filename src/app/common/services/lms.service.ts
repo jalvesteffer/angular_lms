@@ -12,8 +12,6 @@ export class LmsService {
     return this.http.get(url);
   }
 
-
-
   deleteObj(url, id: number) {
 
     const paramUrl = `${url}/${id}`;
@@ -24,5 +22,9 @@ export class LmsService {
     };
 
     return this.http.delete(paramUrl, options);
+  }
+
+  updateObj(url, obj) {
+    return this.http.put(url, obj);
   }
 }

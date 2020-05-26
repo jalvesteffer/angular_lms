@@ -6,7 +6,23 @@ export const environment = {
   production: false,
   appUrl: 'http://localhost:3000/lms/admin',
   readAuthorsURI: '/authors',
-  deleteAuthorsURI: '/authors'
+  readBooksURI: '/books',
+  readPublishersURI: '/publishers',
+  readGenresURI: '/genres',
+  readBorrowersURI: '/borrowers',
+  readBranchesURI: '/branches',
+  deleteAuthorsURI: '/authors',
+  deleteBooksURI: '/books',
+  deletePublishersURI: '/publishers',
+  deleteGenresURI: '/genres',
+  deleteBorrowersURI: '/borrowers',
+  deleteBranchesURI: '/branches',
+  updateAuthorsURI: '/authors',
+  updateBooksURI: '/books',
+  updatePublishersURI: '/publishers',
+  updateGenresURI: '/genres',
+  updateBorrowersURI: '/borrowers',
+  updateBranchesURI: '/branches'
 };
 
 /*
