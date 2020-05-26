@@ -1,7 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +22,7 @@ import { BranchComponent } from './administrator/branch/branch.component';
 import { GenreComponent } from './administrator/genre/genre.component';
 import { LoanComponent } from './administrator/loan/loan.component';
 import { BorrowerAdminComponent } from './administrator/borrower-admin/borrower-admin.component';
+import { LmsService } from "./common/services/lms.service";
 
 @NgModule({
 
@@ -44,10 +47,12 @@ import { BorrowerAdminComponent } from './administrator/borrower-admin/borrower-
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
-    HttpClientModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    NgbModule,
+    NgMultiSelectDropDownModule
   ],
-  providers: [],
+  providers: [LmsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,14 +1,14 @@
-<div class="container marketing">
+<!-- <div class="container marketing">
   <h2>Total number of Publishers in LMS are {{ totalPublishers }} as of {{ today | date: "short" }}</h2>
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
-        <th scope="col">#</th>
+        <th scope="col"></th>
         <th scope="col">Name</th>
         <th scope="col">Address</th>
         <th scope="col">Phone</th>
-        <th scope="col">Edit</th>
-        <th scope="col">Delete</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
@@ -17,9 +17,29 @@
         <td>{{ p.publisherName }}</td>
         <td>{{ p.publisherAddress }}</td>
         <td>{{ p.publisherPhone }}</td>
-        <td></td>
-        <td></td>
+        <td><button type="button" class="btn btn-secondary" (click)="(open(updatePublisherModal, p))">Edit</button></td>
+        <td><button type="button" class="btn btn-danger" (click)="deletePublisher(p.publisherId)">Delete</button></td>
       </tr>
     </tbody>
   </table>
 </div>
+
+<ng-template #updatePublisherModal let-c="close" let-d="dismiss">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Publisher</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Name: <input type="text" [(ngModel)]="selectedObj.publisherName" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="c()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="updatePublisher()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</ng-template> -->
