@@ -23,6 +23,8 @@ import { GenreComponent } from './administrator/genre/genre.component';
 import { LoanComponent } from './administrator/loan/loan.component';
 import { BorrowerAdminComponent } from './administrator/borrower-admin/borrower-admin.component';
 import { LmsService } from "./common/services/lms.service";
+import { BranchLibraryComponent } from './librarian/branch-library/branch-library.component';
+import { CopiesLibraryComponent } from './librarian/copies-library/copies-library.component';
 
 @NgModule({
 
@@ -42,7 +44,9 @@ import { LmsService } from "./common/services/lms.service";
     BorrowerComponent,
     BranchComponent,
     LoanComponent,
-    BorrowerAdminComponent
+    BorrowerAdminComponent,
+    BranchLibraryComponent,
+    CopiesLibraryComponent
   ],
   imports: [
     BrowserModule,
