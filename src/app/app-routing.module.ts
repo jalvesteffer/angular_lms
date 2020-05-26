@@ -13,7 +13,8 @@ import { GenreComponent } from './administrator/genre/genre.component';
 import { BorrowerAdminComponent } from "./administrator/borrower-admin/borrower-admin.component";
 import { BranchComponent } from './administrator/branch/branch.component';
 import { LoanComponent } from './administrator/loan/loan.component';
-
+import { BranchLibraryComponent } from "./librarian/branch-library/branch-library.component";
+import { CopiesLibraryComponent } from "./librarian/copies-library/copies-library.component";
 
 const routes: Routes = [
   {
@@ -68,6 +69,14 @@ const routes: Routes = [
       {
         path: "lms/librarian",
         component: LibrarianComponent,
+      },
+      {
+        path: "lms/librarian/branches",
+        component: BranchLibraryComponent,
+      },
+      {
+        path: "lms/librarian/copies",
+        component: CopiesLibraryComponent,
       },
       {
         path: "**",

@@ -46,7 +46,7 @@ import { CopiesLibraryComponent } from './librarian/copies-library/copies-librar
     LoanComponent,
     BorrowerAdminComponent,
     BranchLibraryComponent,
-    CopiesLibraryComponent
+    CopiesLibraryComponent,
   ],
   imports: [
     BrowserModule,
