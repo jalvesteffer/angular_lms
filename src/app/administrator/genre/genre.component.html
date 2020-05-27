@@ -1,5 +1,6 @@
 <div class="container marketing">
   <h2>Total number of Genres in LMS are {{ totalGenres }} as of {{ today | date: "short" }}</h2>
+  <h3><button type="button" class="btn btn-primary" (click)="open(updateGenreModal, null)">Add Genre</button></h3>
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
@@ -8,12 +9,11 @@
         <th scope="col">Books Tagged with Genre</th>
         <th scope="col"></th>
         <th scope="col"></th>
-        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let g of genres; let i = index">
-        <th scope="row">{{ i+1 }}</th>
+        <td scope="row">{{ i+1 }}</td>
         <td>{{ g.genre_name }}</td>
         <td><span *ngFor="let b of g.books; let isLast=last">{{ b.title }}{{isLast ? '' : ', '}} </span></td>
         <td><button type="button" class="btn btn-secondary" (click)="(open(updateGenreModal, g))">Edit</button></td>
