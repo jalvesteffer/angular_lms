@@ -12,18 +12,22 @@ export const environment = {
   readGenresURI: '/genres',
   readBorrowersURI: '/borrowers',
   readBranchesURI: '/branches',
+  readBookCopiesURI: '/bookcopies',
   deleteAuthorsURI: '/authors',
   deleteBooksURI: '/books',
   deletePublishersURI: '/publishers',
   deleteGenresURI: '/genres',
   deleteBorrowersURI: '/borrowers',
   deleteBranchesURI: '/branches',
+  deleteBookCopiesURI: '/bookcopies',
   updateAuthorsURI: '/authors',
   updateBooksURI: '/books',
   updatePublishersURI: '/publishers',
   updateGenresURI: '/genres',
   updateBorrowersURI: '/borrowers',
-  updateBranchesURI: '/branches'
+  updateBranchesURI: '/branches',
+  updateLibraryBranchesURI: '/branches/branch',
+  updateBookCopiesURI: '/bookcopies'
 };
 
 /*
