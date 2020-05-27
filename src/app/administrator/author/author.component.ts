@@ -19,7 +19,6 @@ export class AuthorComponent implements OnInit {
   closeResult: any;
   selectedObj: any;
   updateAuthorForm: FormGroup;
-  /* addAuthorForm: FormGroup; */
   authorName: string;
   authorId: number;
   books: any;
@@ -118,8 +117,6 @@ export class AuthorComponent implements OnInit {
         },
           (error) => {
             console.log("error creating new author");
-            this.loadAllAuthors();
-            this.modalService.dismissAll();
           }
         );
     }
@@ -152,21 +149,13 @@ export class AuthorComponent implements OnInit {
       })
     }
 
-    /*     if (this.modalService.hasOpenModals()) {
-          console.log("Open Modals");
-          this.modalService.dismissAll;
-        } */
-
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       (result) => {
-        console.log(`Closed with ${result}`);
-
         this.errMsg = "";
         this.closeResult = `Closed with ${result}`;
       },
       (reason) => {
-        console.log('dismissed');
         this.errMsg = "";
         this.closeResult = `Dismissed`;
       }

@@ -93,15 +93,31 @@ export class GenreComponent implements OnInit {
       genre_name: this.updateGenreForm.value.genre_name,
       books: this.updateGenreForm.value.books
     }
-    this.lmsService.updateObj(`${environment.appUrl}${environment.updateGenresURI}`, genre)
-      .subscribe((res) => {
-        this.loadAllGenres();
-        this.modalService.dismissAll();
-      },
-        (error) => {
-          ;
-        }
-      );
+
+    // perform insert if no author id set
+    if (!genre.genre_id) {
+      this.lmsService.postObj(`${environment.appUrl}${environment.createGenresURI}`, genre)
+        .subscribe((res) => {
+          this.loadAllGenres();
+          this.modalService.dismissAll();
+        },
+          (error) => {
+            console.log("error with postObj");
+          }
+        );
+    }
+    // otherwise, perform update
+    else {
+      this.lmsService.updateObj(`${environment.appUrl}${environment.updateGenresURI}`, genre)
+        .subscribe((res) => {
+          this.loadAllGenres();
+          this.modalService.dismissAll();
+        },
+          (error) => {
+            console.log('Error with updateObj');
+          }
+        );
+    }
   }
 
   open(content, obj) {
@@ -110,6 +126,12 @@ export class GenreComponent implements OnInit {
         books: [obj.books],
         genre_id: obj.genre_id,
         genre_name: obj.genre_name
+      })
+    } else {
+      this.updateGenreForm = this.fb.group({
+        books: null,
+        genre_id: null,
+        genre_name: ""
       })
     }
 
@@ -132,6 +154,7 @@ export class GenreComponent implements OnInit {
         this.totalBooks = res;
       },
         (error) => {
+          console.log("Error loading all books");
           ;
         }
       );
