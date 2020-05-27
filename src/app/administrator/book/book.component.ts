@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
 
 @Component({
   selector: 'app-book',
@@ -17,8 +18,31 @@ export class BookComponent implements OnInit {
   errMsg: any;
   closeResult: any;
   selectedObj: any;
+  updateBookForm: FormGroup;
+  title: string;
+  bookId: number;
+  pubId: number;
+  authors: any;
+  genres: any;
+  totalAuthors: any;
+  totalGenres: any;
+  dropdownSettings: any;
 
-  constructor(private lmsService: LmsService, private modalService: NgbModal) { }
+  constructor(
+    private lmsService: LmsService,
+    private modalService: NgbModal,
+    private fb: FormBuilder
+  ) {
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: "authorId",
+      textField: "authorName",
+      selectAllText: "Select All",
+      unSelectAllText: "UnSelect All",
+      itemsShowLimit: 5,
+      allowSearchFilter: true
+    };
+  }
 
   ngOnInit() {
     this.loadAllBooks();

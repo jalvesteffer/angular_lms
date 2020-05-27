@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
 
 @Component({
   selector: 'app-publisher',
@@ -17,8 +18,20 @@ export class PublisherComponent implements OnInit {
   errMsg: any;
   closeResult: any;
   selectedObj: any;
+  updatePublisherForm: FormGroup;
+  publisherName: string;
+  publisherId: number;
+  publisherAddress: string;
+  publisherPhone: string;
+  books: any;
+  totalBooks: any;
+  dropdownSettings: any;
 
-  constructor(private lmsService: LmsService, private modalService: NgbModal) { }
+  constructor(
+    private lmsService: LmsService,
+    private modalService: NgbModal,
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit() {
     this.loadAllPublishers();
