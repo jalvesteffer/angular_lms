@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   appUrl: 'http://localhost:3000/lms/admin',
   libraryUrl: 'http://localhost:3000/lms/library',
+  createAuthorsURI: '/authors',
   readAuthorsURI: '/authors',
   readBooksURI: '/books',
   readPublishersURI: '/publishers',
