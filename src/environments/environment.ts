@@ -7,6 +7,7 @@ export const environment = {
   appUrl: 'http://localhost:3000/lms/admin',
   libraryUrl: 'http://localhost:3000/lms/library',
   createAuthorsURI: '/authors',
+  createPublishersURI: '/publishers',
   createGenresURI: '/genres',
   readAuthorsURI: '/authors',
   readBooksURI: '/books',
