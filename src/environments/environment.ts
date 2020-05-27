@@ -26,6 +26,7 @@ export const environment = {
   updateGenresURI: '/genres',
   updateBorrowersURI: '/borrowers',
   updateBranchesURI: '/branches',
+  updateLibraryBranchesURI: '/branches/branch',
   updateBookCopiesURI: '/bookcopies'
 };
 

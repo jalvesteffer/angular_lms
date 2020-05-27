@@ -35,20 +35,8 @@ export class BranchLibraryComponent implements OnInit {
       );
   }
 
-  // deleteBranch(branchId) {
-
-  //   this.lmsService.deleteObj(`${environment.libraryUrl}${environment.deleteBranchesURI}`, branchId)
-  //     .subscribe((res) => {
-  //       this.loadAllBranches();
-  //     },
-  //       (error) => {
-  //         ;
-  //       }
-  //     );
-  // }
-
   // updateBranch() {
-  //   this.lmsService.updateObj(`${environment.libraryUrl}${environment.updateBranchesURI}`, this.selectedObj)
+  //   this.lmsService.updateObj(`${environment.libraryUrl}${environment.updateLibraryBranchesURI}`, this.selectedObj)
   //     .subscribe((res) => {
   //       this.loadAllBranches();
   //       this.modalService.dismissAll();

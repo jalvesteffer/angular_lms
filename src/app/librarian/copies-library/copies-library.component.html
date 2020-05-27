@@ -1,5 +1,5 @@
 <div class="container marketing">
-  <h2>Total number of Book copies available in LMS are {{ totalBookCopies }} as of {{ today | date: "short" }}</h2>
+  <h2>Total number of records that matched the request are {{ totalBookCopies }} as of {{ today | date: "short" }}</h2>
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
@@ -7,7 +7,6 @@
         <th scope="col">Title</th>
         <th scope="col">Library</th>
         <th scope="col">Number of Copies</th>
-        <th scope="col"></th>
         <th scope="col"></th>
         <th scope="col"></th>
       </tr>
@@ -20,7 +19,6 @@
         <td>{{ b.noOfCopies}}</td>
         <td></td>
         <td><button type="button" class="btn btn-secondary" (click)="(open(updateBranchModal, b))">Edit</button></td>
-        <td><button type="button" class="btn btn-danger" (click)="deleteBranch(b.branchId)">Delete</button></td>
       </tr>
     </tbody>
   </table>
