@@ -27,4 +27,8 @@ export class LmsService {
   updateObj(url, obj) {
     return this.http.put(url, obj);
   }
+
+  postObj(url, obj) {
+    return this.http.post(url, obj);
+  }
 }

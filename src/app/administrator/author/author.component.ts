@@ -19,6 +19,7 @@ export class AuthorComponent implements OnInit {
   closeResult: any;
   selectedObj: any;
   updateAuthorForm: FormGroup;
+  /* addAuthorForm: FormGroup; */
   authorName: string;
   authorId: number;
   books: any;
@@ -107,15 +108,33 @@ export class AuthorComponent implements OnInit {
       authorName: this.updateAuthorForm.value.authorName,
       books: this.updateAuthorForm.value.books
     }
-    this.lmsService.updateObj(`${environment.appUrl}${environment.updateAuthorsURI}`, author)
-      .subscribe((res) => {
-        this.loadAllAuthors();
-        this.modalService.dismissAll();
-      },
-        (error) => {
-          ;
-        }
-      );
+
+    // perform insert if no author id set
+    if (!author.authorId) {
+      this.lmsService.postObj(`${environment.appUrl}${environment.createAuthorsURI}`, author)
+        .subscribe((res) => {
+          this.loadAllAuthors();
+          this.modalService.dismissAll();
+        },
+          (error) => {
+            console.log("error creating new author");
+            this.loadAllAuthors();
+            this.modalService.dismissAll();
+          }
+        );
+    }
+    // otherwise, perform update
+    else {
+      this.lmsService.updateObj(`${environment.appUrl}${environment.updateAuthorsURI}`, author)
+        .subscribe((res) => {
+          this.loadAllAuthors();
+          this.modalService.dismissAll();
+        },
+          (error) => {
+            ;
+          }
+        );
+    }
   }
 
   open(content, obj) {
@@ -125,15 +144,29 @@ export class AuthorComponent implements OnInit {
         authorId: obj.authorId,
         authorName: obj.authorName
       })
+    } else {
+      this.updateAuthorForm = this.fb.group({
+        books: null,
+        authorId: null,
+        authorName: ""
+      })
     }
+
+    /*     if (this.modalService.hasOpenModals()) {
+          console.log("Open Modals");
+          this.modalService.dismissAll;
+        } */
 
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       (result) => {
+        console.log(`Closed with ${result}`);
+
         this.errMsg = "";
         this.closeResult = `Closed with ${result}`;
       },
       (reason) => {
+        console.log('dismissed');
         this.errMsg = "";
         this.closeResult = `Dismissed`;
       }
