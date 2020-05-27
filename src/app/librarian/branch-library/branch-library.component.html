@@ -22,22 +22,105 @@
   </table>
 </div>
 
-<!-- <ng-template #updateBranchModal let-c="close" let-d="dismiss">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Branch</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Name: <input type="text" [(ngModel)]="selectedObj.branchName" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="c()">Close</button>
-        <button type="button" class="btn btn-primary" (click)="updateBranch()">Save changes</button>
+<ng-template #updateBranchModal let-c="close" let-d="dismiss">
+  <form [formGroup]="updateBranchForm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update {{branchName}} Information</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="c()"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            Enter Library Branch Name:
+            <input
+              class="form-control"
+              id="branchName"
+              formControlName="branchName"
+              [ngClass]="{
+                'is-invalid': updateBranchForm.controls['branchName'].errors
+              }"
+            />
+            <div
+              *ngIf="updateBranchForm.controls['branchName'].errors"
+              class="error-msg"
+            >
+              <div
+                [hidden]="
+                  !updateBranchForm.controls['branchName'].errors.required
+                "
+              >
+              Library Branch Name is required
+              </div>
+              <div
+                [hidden]="
+                  updateBranchForm.controls['branchName'].errors.maxLength ||
+                  updateBranchForm.controls['branchName'].errors.minLength
+                "
+              >
+              Library Branch Name should be between 3-45 chars in length
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            Enter Library Branch Address:
+            <input
+              class="form-control"
+              id="branchAddress"
+              formControlName="branchAddress"
+              [ngClass]="{
+                'is-invalid': updateBranchForm.controls['branchAddress'].errors
+              }"
+            />
+            <div
+              *ngIf="updateBranchForm.controls['branchAddress'].errors"
+              class="error-msg"
+            >
+              <div
+                [hidden]="
+                  !updateBranchForm.controls['branchAddress'].errors.required
+                "
+              >
+              Library Branch Address is required
+              </div>
+              <div
+                [hidden]="
+                  updateBranchForm.controls['branchAddress'].errors.maxLength ||
+                  updateBranchForm.controls['branchAddress'].errors.minLength
+                "
+              >
+              Library Branch Address should be between 9-45 chars in length
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+            (click)="c()"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="updateBranch()"
+            [disabled]="updateBranchForm.invalid"
+          >
+            Save changes
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-</ng-template> -->
+  </form>
+</ng-template>
