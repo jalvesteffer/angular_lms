@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
 
 @Component({
   selector: 'app-borrower-admin',
@@ -17,8 +18,18 @@ export class BorrowerAdminComponent implements OnInit {
   errMsg: any;
   closeResult: any;
   selectedObj: any;
+  updateBorrowerForm: FormGroup;
+  name: string;
+  cardNo: number;
+  address: string;
+  phone: string;
+  dropdownSettings: any;
 
-  constructor(private lmsService: LmsService, private modalService: NgbModal) { }
+  constructor(
+    private lmsService: LmsService,
+    private modalService: NgbModal,
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit() {
     this.loadAllBorrowers();

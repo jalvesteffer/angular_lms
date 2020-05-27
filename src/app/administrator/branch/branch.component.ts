@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
 
 @Component({
   selector: 'app-branch',
@@ -17,8 +18,17 @@ export class BranchComponent implements OnInit {
   errMsg: any;
   closeResult: any;
   selectedObj: any;
+  updateBranchForm: FormGroup;
+  branchName: string;
+  branchId: number;
+  branchAddress: string;
+  dropdownSettings: any;
 
-  constructor(private lmsService: LmsService, private modalService: NgbModal) { }
+  constructor(
+    private lmsService: LmsService,
+    private modalService: NgbModal,
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit() {
     this.loadAllBranches();
