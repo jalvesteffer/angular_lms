@@ -30,7 +30,8 @@ export const environment = {
   updateBorrowersURI: '/borrowers',
   updateBranchesURI: '/branches',
   updateLibraryBranchesURI: '/branches/branch',
-  updateBookCopiesURI: '/bookcopies'
+  updateBookCopiesURI: '/bookcopies',
+  likeURI: '/like',
 };
 
 /*
