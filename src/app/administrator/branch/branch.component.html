@@ -1,5 +1,7 @@
-<!-- <div class="container marketing">
+<div class="container marketing">
   <h2>Total number of Branches in LMS are {{ totalBranches }} as of {{ today | date: "short" }}</h2>
+  <h3><button type="button" class="btn btn-primary" (click)="open(updateBranchModal, null)">Add Branch</button>
+  </h3>
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
@@ -8,15 +10,13 @@
         <th scope="col">Address</th>
         <th scope="col"></th>
         <th scope="col"></th>
-        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let b of branches; let i = index">
-        <th scope="row">{{ i+1 }}</th>
+        <td scope="row">{{ i+1 }}</td>
         <td>{{ b.branchName }}</td>
         <td>{{ b.branchAddress }}</td>
-        <td></td>
         <td><button type="button" class="btn btn-secondary" (click)="(open(updateBranchModal, b))">Edit</button></td>
         <td><button type="button" class="btn btn-danger" (click)="deleteBranch(b.branchId)">Delete</button></td>
       </tr>
@@ -25,21 +25,46 @@
 </div>
 
 <ng-template #updateBranchModal let-c="close" let-d="dismiss">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Branch</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Name: <input type="text" [(ngModel)]="selectedObj.branchName" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="c()">Close</button>
-        <button type="button" class="btn btn-primary" (click)="updateBranch()">Save changes</button>
+  <form [formGroup]="updateBranchForm">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Branch</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <p>Name:
+              <input class="form-control" id="branchName" formControlName="branchName" [ngClass]="{
+              'is-invalid': updateBranchForm.controls['branchName'].errors
+            }" /></p>
+            <div *ngIf="updateBranchForm.controls['branchName'].errors" class="error-msg">
+              <div [hidden]="
+                  !updateBranchForm.controls['branchName'].errors.required
+                ">
+                Name is required
+              </div>
+              <div [hidden]="
+              updateBranchForm.controls['branchName'].errors.maxLength ||
+              updateBranchForm.controls['branchName'].errors.minLength
+                ">
+                Name should be between 3-45 chars in length
+              </div>
+            </div>
+
+            <p>Address:
+              <input class="form-control" id="branchAddress" formControlName="branchAddress" /></p>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="c()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="updateBranch()"
+            [disabled]="updateBranchForm.invalid">Save changes</button>
+        </div>
       </div>
     </div>
-  </div>
-</ng-template> -->
+  </form>
+</ng-template>
