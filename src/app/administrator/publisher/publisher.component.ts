@@ -23,18 +23,42 @@ export class PublisherComponent implements OnInit {
   publisherId: number;
   publisherAddress: string;
   publisherPhone: string;
-  books: any;
-  totalBooks: any;
   dropdownSettings: any;
 
   constructor(
     private lmsService: LmsService,
     private modalService: NgbModal,
     private fb: FormBuilder
-  ) { }
+  ) {
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: "publisherId",
+      textField: "publisherName",
+      selectAllText: "Select All",
+      unSelectAllText: "UnSelect All",
+      itemsShowLimit: 5,
+      allowSearchFilter: true
+    };
+  }
 
   ngOnInit() {
     this.loadAllPublishers();
+    this.initializeFormGroup();
+  }
+
+  onItemSelect() { }
+
+  initializeFormGroup() {
+    this.updatePublisherForm = new FormGroup({
+      publisherName: new FormControl(this.publisherName, [
+        Validators.required,
+        Validators.maxLength(45),
+        Validators.minLength(3),
+      ]),
+      publisherId: new FormControl(this.publisherId),
+      publisherAddress: new FormControl(this.publisherAddress),
+      publisherPhone: new FormControl(this.publisherPhone)
+    });
   }
 
   loadAllPublishers() {
@@ -44,7 +68,7 @@ export class PublisherComponent implements OnInit {
         this.totalPublishers = this.publishers.length;
       },
         (error) => {
-          ;
+          console.log("Error with loadAllPublishers");
         }
       );
   }
@@ -62,19 +86,56 @@ export class PublisherComponent implements OnInit {
   }
 
   updatePublisher() {
-    this.lmsService.updateObj(`${environment.appUrl}${environment.updatePublishersURI}`, this.selectedObj)
-      .subscribe((res) => {
-        this.loadAllPublishers();
-        this.modalService.dismissAll();
-      },
-        (error) => {
-          ;
-        }
-      );
+    const publisher = {
+      publisherId: this.updatePublisherForm.value.publisherId,
+      publisherName: this.updatePublisherForm.value.publisherName,
+      publisherAddress: this.updatePublisherForm.value.publisherAddress,
+      publisherPhone: this.updatePublisherForm.value.publisherPhone
+    }
+
+    // perform insert if no publisher id set
+    if (!publisher.publisherId) {
+      this.lmsService.postObj(`${environment.appUrl}${environment.createPublishersURI}`, publisher)
+        .subscribe((res) => {
+          this.loadAllPublishers();
+          this.modalService.dismissAll();
+        },
+          (error) => {
+            console.log("error with postObj");
+          }
+        );
+    }
+    // otherwise, perform update
+    else {
+      this.lmsService.updateObj(`${environment.appUrl}${environment.updatePublishersURI}`, publisher)
+        .subscribe((res) => {
+          this.loadAllPublishers();
+          this.modalService.dismissAll();
+        },
+          (error) => {
+            console.log("error with updateObj");
+          }
+        );
+    }
   }
 
   open(content, obj) {
-    this.selectedObj = obj;
+    if (obj !== null) {
+      this.updatePublisherForm = this.fb.group({
+        publisherId: obj.publisherId,
+        publisherName: obj.publisherName,
+        publisherAddress: obj.publisherAddress,
+        publisherPhone: obj.publisherPhone
+      })
+    } else {
+      this.updatePublisherForm = this.fb.group({
+        publisherId: null,
+        publisherName: "",
+        publisherAddress: null,
+        publisherPhone: null
+      })
+    }
+
     this.modalRef = this.modalService.open(content);
     this.modalRef.result.then(
       (result) => {

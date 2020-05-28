@@ -1,5 +1,7 @@
-<!-- <div class="container marketing">
+<div class="container marketing">
   <h2>Total number of Publishers in LMS are {{ totalPublishers }} as of {{ today | date: "short" }}</h2>
+  <h3><button type="button" class="btn btn-primary" (click)="open(updatePublisherModal, null)">Add Publisher</button>
+  </h3>
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
@@ -13,7 +15,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let p of publishers; let i = index">
-        <th scope="row">{{ i+1 }}</th>
+        <td scope="row">{{ i+1 }}</td>
         <td>{{ p.publisherName }}</td>
         <td>{{ p.publisherAddress }}</td>
         <td>{{ p.publisherPhone }}</td>
@@ -25,21 +27,48 @@
 </div>
 
 <ng-template #updatePublisherModal let-c="close" let-d="dismiss">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Publisher</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Name: <input type="text" [(ngModel)]="selectedObj.publisherName" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="c()">Close</button>
-        <button type="button" class="btn btn-primary" (click)="updatePublisher()">Save changes</button>
+  <form [formGroup]="updatePublisherForm">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Publisher</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <p>Name:
+              <input class="form-control" id="publisherName" formControlName="publisherName" [ngClass]="{
+              'is-invalid': updatePublisherForm.controls['publisherName'].errors
+            }" /></p>
+            <div *ngIf="updatePublisherForm.controls['publisherName'].errors" class="error-msg">
+              <div [hidden]="
+                  !updatePublisherForm.controls['publisherName'].errors.required
+                ">
+                Name is required
+              </div>
+              <div [hidden]="
+              updatePublisherForm.controls['publisherName'].errors.maxLength ||
+              updatePublisherForm.controls['publisherName'].errors.minLength
+                ">
+                Name should be between 3-45 chars in length
+              </div>
+            </div>
+
+            <p>Address:
+              <input class="form-control" id="publisherAddress" formControlName="publisherAddress" /></p>
+            <p>Phone:
+              <input class="form-control" id="publisherPhone" formControlName="publisherPhone" /></p>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="c()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="updatePublisher()"
+            [disabled]="updatePublisherForm.invalid">Save changes</button>
+        </div>
       </div>
     </div>
-  </div>
-</ng-template> -->
+  </form>
+</ng-template>
