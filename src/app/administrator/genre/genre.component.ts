@@ -43,7 +43,6 @@ export class GenreComponent implements OnInit {
 
   ngOnInit() {
     this.loadAllGenres();
-    this.loadAllBooks();
     this.initializeFormGroup();
   }
 
@@ -121,6 +120,8 @@ export class GenreComponent implements OnInit {
   }
 
   open(content, obj) {
+    this.loadAllBooks();
+
     if (obj !== null) {
       this.updateGenreForm = this.fb.group({
         books: [obj.books],

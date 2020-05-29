@@ -43,7 +43,6 @@ export class AuthorComponent implements OnInit {
 
   ngOnInit() {
     this.loadAllAuthors();
-    this.loadAllBooks();
     this.initializeFormGroup();
   }
 
@@ -135,6 +134,8 @@ export class AuthorComponent implements OnInit {
   }
 
   open(content, obj) {
+    this.loadAllBooks();
+
     if (obj !== null) {
       this.updateAuthorForm = this.fb.group({
         books: [obj.books],
