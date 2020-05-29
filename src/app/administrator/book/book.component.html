@@ -1,5 +1,6 @@
-<!-- <div class="container marketing">
+<div class="container marketing">
   <h2>Total number of Books in LMS are {{ totalBooks }} as of {{ today | date: "short" }}</h2>
+  <h3><button type="button" class="btn btn-primary" (click)="open(updateBookModal, null)">Add Book</button></h3>
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
@@ -16,9 +17,9 @@
       <tr *ngFor="let b of books; let i = index">
         <th scope="row">{{ i+1 }}</th>
         <td>{{ b.title }}</td>
-        <td>{{ b.authors }}</td>
-        <td>{{ b.publisher }}</td>
-        <td>{{ b.genres }}</td>
+        <td><span *ngFor="let a of b.authors; let isLast=last">{{ a.authorName }}{{isLast ? '' : ', '}} </span></td>
+        <td><span *ngFor="let p of b.publisher; let isLast=last">{{ p.publisherName }} </span></td>
+        <td><span *ngFor="let g of b.genres; let isLast=last">{{ g.genre_name }}{{isLast ? '' : ', '}} </span></td>
         <td><button type="button" class="btn btn-secondary" (click)="(open(updateBookModal, b))">Edit</button></td>
         <td><button type="button" class="btn btn-danger" (click)="deleteBook(b.bookId)">Delete</button></td>
       </tr>
@@ -27,21 +28,49 @@
 </div>
 
 <ng-template #updateBookModal let-c="close" let-d="dismiss">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Book</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Title: <input type="text" [ngModel]="selectedObj.title" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="c()">Close</button>
-        <button type="button" class="btn btn-primary" (click)="updateBook()">Save changes</button>
+  <form [formGroup]="updateBookForm">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Book</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="c()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <p>Title:
+              <input class="form-control" id="title" formControlName="title" /></p>
+
+            <p>Author(s):
+              <ng-multiselect-dropdown [placeholder]="'Select Author(s)'" [data]="totalAuthors"
+                formControlName="authors" [settings]="authorsDropdownSettings" (onSelect)="onItemSelect($event)"
+                (onSelectAll)="onSelectAll($event)">
+              </ng-multiselect-dropdown>
+            </p>
+
+            <p>Publisher:
+              <ng-multiselect-dropdown [placeholder]="'Select Publisher'" [data]="totalPublishers"
+                formControlName="publisher" [settings]="publishersDropdownSettings" (onSelect)="onItemSelect($event)"
+                (onSelectAll)="onSelectAll($event)">
+              </ng-multiselect-dropdown>
+            </p>
+
+            <p>Genre(s):
+              <ng-multiselect-dropdown [placeholder]="'Select Genre(s)'" [data]="totalGenres" formControlName="genres"
+                [settings]="genresDropdownSettings" (onSelect)="onItemSelect($event)"
+                (onSelectAll)="onSelectAll($event)">
+              </ng-multiselect-dropdown>
+            </p>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="c()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="updateBook()" [disabled]="updateBookForm.invalid">Save
+            changes</button>
+        </div>
       </div>
     </div>
-  </div>
-</ng-template> -->
+  </form>
+</ng-template>
