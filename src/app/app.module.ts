@@ -31,6 +31,7 @@ import { TitleSortPipe } from './common/title-sort.pipe';
 import { AuthorSortPipe } from './common/author-sort.pipe';
 import { PublisherSortPipe } from './common/publisher-sort.pipe';
 import { GenreSortPipe } from './common/genre-sort.pipe';
+import { BorrowerSortPipe } from './common/borrower-sort.pipe';
 
 @NgModule({
 
@@ -58,6 +59,7 @@ import { GenreSortPipe } from './common/genre-sort.pipe';
     AuthorSortPipe,
     PublisherSortPipe,
     GenreSortPipe,
+    BorrowerSortPipe,
   ],
   imports: [
     BrowserModule,
