@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit  } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
+import { PagerService } from "../../common/services/pager.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -27,7 +28,15 @@ export class BranchLibraryComponent implements OnInit {
   closeResult: any;
   selectedObj: any;
 
-  constructor(private lmsService: LmsService, private fb: FormBuilder,private modalService: NgbModal) { }
+  //sort
+  searchBranchForm: FormGroup;
+  searchString: string;
+
+  //pagnation
+  pager: any = {};
+  pagedBranch: any[];
+
+  constructor(private lmsService: LmsService, private pagerService: PagerService, private fb: FormBuilder,private modalService: NgbModal) { }
 
   ngOnInit() {
     this.loadAllBranches();
@@ -49,6 +58,9 @@ export class BranchLibraryComponent implements OnInit {
       ]),
       branchId: new FormControl(this.branchId)
     });
+    this.searchBranchForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
+    });
   }
 
   loadAllBranches() {
@@ -56,11 +68,37 @@ export class BranchLibraryComponent implements OnInit {
       .subscribe((res) => {
         this.branches = res;
         this.totalBranches = this.branches.length;
+        this.setPage(1);
       },
         (error) => {
           ;
         }
       );
+  }
+
+  searchBranches() {
+    let searchString = this.searchBranchForm.value.searchString;
+    let dash = "/";
+    if(searchString.length != ""){ 
+      this.lmsService
+        .getAll(
+          `${environment.libraryUrl}${environment.readBranchesURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.branches= res;
+            this.totalBranches = this.branches.length;
+            this.searchString = "";
+            this.setPage(1);
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+      }else{
+        this.searchString = "";
+        this.loadAllBranches();
+      }
   }
 
   updateBranch() {
@@ -109,6 +147,17 @@ export class BranchLibraryComponent implements OnInit {
         this.errMsg = "";
         this.closeResult = `Dismissed`;
       }
+    );
+  }
+
+  setPage(page: number) {
+    if (page < 1 || page > this.pager.totalAuthors) {
+      return;
+    }
+    this.pager = this.pagerService.getPager(this.totalBranches, page, 10);
+    this.pagedBranch = this.branches.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
     );
   }
 }
