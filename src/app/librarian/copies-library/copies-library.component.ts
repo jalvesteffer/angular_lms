@@ -28,12 +28,15 @@ export class CopiesLibraryComponent implements OnInit {
   updateBookCopiesForm: FormGroup;
   errMsg: any;
   closeResult: any;
-  selectedObj: any;
+  
+  
+  searchBookCopiesForm: FormGroup;
+  searchString: string;
 
   constructor(private lmsService: LmsService, private fb: FormBuilder,private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.loadAllCopies()
+    this.loadAllCopies();
     this.initializeFormGroup();
   }
   ngAfterViewInit() {}
@@ -46,6 +49,9 @@ export class CopiesLibraryComponent implements OnInit {
       ]),
       bookId: new FormControl(this.bookId),
       branchId: new FormControl(this.branchId)
+    });
+    this.searchBookCopiesForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
     });
   }
 
@@ -61,6 +67,30 @@ export class CopiesLibraryComponent implements OnInit {
       );
   }
 
+  searchBookCopies() {
+    let searchString = this.searchBookCopiesForm.value.searchString;
+    let dash = "/";
+    if(searchString.length != ""){ 
+      this.lmsService
+        .getAll(
+          `${environment.libraryUrl}${environment.readBookCopiesURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.bookCopies = res;
+            this.totalBookCopies = this.bookCopies.length;
+            this.searchString = "";
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+      }else{
+        this.searchString = "";
+        this.loadAllCopies();
+      }
+  }
+
   updateBookCopies() {
     const bookCopy = {
       bookId: this.updateBookCopiesForm.value.bookId,
@@ -73,7 +103,6 @@ export class CopiesLibraryComponent implements OnInit {
         this.modalService.dismissAll();
       },
         (error) => {
-          
         }
       );
   }

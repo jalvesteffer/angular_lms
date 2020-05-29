@@ -1,5 +1,30 @@
+<!-- font awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<script src="https://use.fontawesome.com/ca9c43d64a.js"></script>
+
+<!-- start of book copies container -->
 <div class="container marketing">
   <h2>Total number of records that matched the request are {{ totalBookCopies }} as of {{ today | date: "short" }}</h2>
+
+  <!-- Sort by Book -->
+  <div class="row">
+    <div class="col-lg-8"></div>
+    <div class="col-lg-4">
+      <form [formGroup]="searchBookCopiesForm" class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          class="form-control form-control-sm ml-3 w-75" 
+          formControlName="searchString"
+          (input)="searchBookCopies()"
+          placeholder="Search By Book"
+          aria-label="Search By Book"
+        />
+      </form>
+    </div>
+  </div>
+  <br>
+<!-- book copies information -->
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
