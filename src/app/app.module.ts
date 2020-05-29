@@ -26,6 +26,12 @@ import { LmsService } from "./common/services/lms.service";
 import { BranchLibraryComponent } from './librarian/branch-library/branch-library.component';
 import { CopiesLibraryComponent } from './librarian/copies-library/copies-library.component';
 import { PagerService } from './common/services/pager.service';
+import { BranchSortPipe } from './common/branch-sort.pipe';
+import { TitleSortPipe } from './common/title-sort.pipe';
+import { AuthorSortPipe } from './common/author-sort.pipe';
+import { PublisherSortPipe } from './common/publisher-sort.pipe';
+import { GenreSortPipe } from './common/genre-sort.pipe';
+import { BorrowerSortPipe } from './common/borrower-sort.pipe';
 
 @NgModule({
 
@@ -48,6 +54,12 @@ import { PagerService } from './common/services/pager.service';
     BorrowerAdminComponent,
     BranchLibraryComponent,
     CopiesLibraryComponent,
+    BranchSortPipe,
+    TitleSortPipe,
+    AuthorSortPipe,
+    PublisherSortPipe,
+    GenreSortPipe,
+    BorrowerSortPipe,
   ],
   imports: [
     BrowserModule,
