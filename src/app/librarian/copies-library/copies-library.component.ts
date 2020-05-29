@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit  } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
+import { PagerService } from "../../common/services/pager.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -29,16 +30,21 @@ export class CopiesLibraryComponent implements OnInit {
   errMsg: any;
   closeResult: any;
   
-  
+  //sort
   searchBookCopiesForm: FormGroup;
   searchString: string;
 
-  constructor(private lmsService: LmsService, private fb: FormBuilder,private modalService: NgbModal) { }
+  //pagnation
+  pager: any = {};
+  pagedBookCopies: any[];
+
+  constructor(private lmsService: LmsService, private pagerService: PagerService, private fb: FormBuilder,private modalService: NgbModal) { }
 
   ngOnInit() {
     this.loadAllCopies();
     this.initializeFormGroup();
   }
+  
   ngAfterViewInit() {}
 
   initializeFormGroup() {
@@ -60,6 +66,7 @@ export class CopiesLibraryComponent implements OnInit {
       .subscribe((res) => {
         this.bookCopies = res;
         this.totalBookCopies = this.bookCopies.length;
+        this.setPage(1);
       },
         (error) => {
           ;
@@ -80,6 +87,7 @@ export class CopiesLibraryComponent implements OnInit {
             this.bookCopies = res;
             this.totalBookCopies = this.bookCopies.length;
             this.searchString = "";
+            this.setPage(1);
           },
           (error) => {
             this.searchString = "";
@@ -136,6 +144,17 @@ export class CopiesLibraryComponent implements OnInit {
         this.errMsg = "";
         this.closeResult = `Dismissed`;
       }
+    );
+  }
+
+  setPage(page: number) {
+    if (page < 1 || page > this.pager.totalAuthors) {
+      return;
+    }
+    this.pager = this.pagerService.getPager(this.totalBookCopies, page, 10);
+    this.pagedBookCopies = this.bookCopies.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
     );
   }
 

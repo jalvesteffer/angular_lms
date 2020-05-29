@@ -25,6 +25,7 @@ import { BorrowerAdminComponent } from './administrator/borrower-admin/borrower-
 import { LmsService } from "./common/services/lms.service";
 import { BranchLibraryComponent } from './librarian/branch-library/branch-library.component';
 import { CopiesLibraryComponent } from './librarian/copies-library/copies-library.component';
+import { PagerService } from './common/services/pager.service';
 
 @NgModule({
 
@@ -56,7 +57,7 @@ import { CopiesLibraryComponent } from './librarian/copies-library/copies-librar
     NgbModule,
     NgMultiSelectDropDownModule
   ],
-  providers: [LmsService],
+  providers: [LmsService, PagerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
