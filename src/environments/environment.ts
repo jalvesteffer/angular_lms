@@ -18,6 +18,8 @@ export const environment = {
   readGenresURI: '/genres',
   readBorrowersURI: '/borrowers',
   readBranchesURI: '/branches',
+  readOverdueLoansURI: '/loans',
+  extendOverdueLoansURI: '/loans',
   readBookCopiesURI: '/bookcopies',
   deleteAuthorsURI: '/authors',
   deleteBooksURI: '/books',

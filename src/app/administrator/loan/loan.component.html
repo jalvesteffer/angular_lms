@@ -1,3 +1,25 @@
-<p>
-  loan works!
-</p>
+<div class="container marketing">
+  <h2>Total number of Overdue Loans in LMS are {{ totalLoans }} as of {{ today | date: "short" }}</h2>
+  <table class="table table-bordered table-dark">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Borrower</th>
+        <th scope="col">Book</th>
+        <th scope="col">Library Branch</th>
+        <th scope="col">Due Date</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let l of loans; let i = index">
+        <td scope="row">{{ i+1 }}</td>
+        <td>{{ l.borrower[0].name }}<br>Card #: {{ l.borrower[0].cardNo }} </td>
+        <td>{{ l.book[0].title }}</td>
+        <td>{{ l.branch[0].branchName }}</td>
+        <td>{{ l.dueDate.substring(0,10) }}</td>
+        <td><button type="button" class="btn btn-danger" (click)="extendLoan(l.loanId)">Extend</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
