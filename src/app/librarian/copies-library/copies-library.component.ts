@@ -25,8 +25,10 @@ export class CopiesLibraryComponent implements OnInit {
   noOfCopies: number;
   title: string;
   today = new Date();
+
   private modalRef: NgbModalRef;
   updateBookCopiesForm: FormGroup;
+  addBookCopiesForm: FormGroup;
   errMsg: any;
   closeResult: any;
   
@@ -38,7 +40,36 @@ export class CopiesLibraryComponent implements OnInit {
   pager: any = {};
   pagedBookCopies: any[];
 
-  constructor(private lmsService: LmsService, private pagerService: PagerService, private fb: FormBuilder,private modalService: NgbModal) { }
+  //branchs
+  totalBranches: any;
+  branchDropdownSettings: any;
+
+  //books
+  totalBooks: any;
+  bookDropdownSettings: any;
+
+  constructor(private lmsService: LmsService, private pagerService: PagerService, private fb: FormBuilder,private modalService: NgbModal)  
+    {
+      this.branchDropdownSettings = {
+        singleSelection: false,
+        idField: "branchId",
+        textField: "branchName",
+        selectAllText: "Select All",
+        unSelectAllText: "UnSelect All",
+        itemsShowLimit: 5,
+        allowSearchFilter: true
+      };
+  
+      this.bookDropdownSettings = {
+        singleSelection: false,
+        idField: "bookId",
+        textField: "title",
+        selectAllText: "Select All",
+        unSelectAllText: "UnSelect All",
+        itemsShowLimit: 5,
+        allowSearchFilter: true
+      };
+  }
 
   ngOnInit() {
     this.loadAllCopies();
@@ -47,7 +78,7 @@ export class CopiesLibraryComponent implements OnInit {
   
   ngAfterViewInit() {}
 
-  initializeFormGroup() {
+  async initializeFormGroup() {
     this.updateBookCopiesForm = new FormGroup({
       noOfCopies: new FormControl(this.noOfCopies, [
         Validators.required,
@@ -59,14 +90,44 @@ export class CopiesLibraryComponent implements OnInit {
     this.searchBookCopiesForm = new FormGroup({
       searchString: new FormControl(this.searchString),
     });
+    this.addBookCopiesForm = new FormGroup({
+    branchName: new FormControl(this.branchName)
+  });
   }
 
-  loadAllCopies() {
+  async loadAllCopies() {
     this.lmsService.getAll(`${environment.libraryUrl}${environment.readBookCopiesURI}`)
       .subscribe((res) => {
         this.bookCopies = res;
         this.totalBookCopies = this.bookCopies.length;
         this.setPage(1);
+        console.log(this.bookCopies);
+
+        this.loadAllBranches();
+      },
+        (error) => {
+          ;
+        }
+      );
+  }
+
+  async loadAllBranches() {
+    this.lmsService.getAll(`${environment.libraryUrl}${environment.readBranchesURI}`)
+      .subscribe((res) => {
+        this.totalBranches = res;
+        this.loadAllBooks();
+      },
+        (error) => {
+          ;
+        }
+      );
+  }
+
+  async loadAllBooks() {
+    this.lmsService.getAll(`${environment.libraryUrl}${environment.readBooksURI}`)
+      .subscribe((res) => {
+        this.totalBooks = res;
+        console.log(this.totalBooks);
       },
         (error) => {
           ;
@@ -148,7 +209,7 @@ export class CopiesLibraryComponent implements OnInit {
   }
 
   setPage(page: number) {
-    if (page < 1 || page > this.pager.totalAuthors) {
+    if (page < 1 || page > this.pager.totalBookCopies) {
       return;
     }
     this.pager = this.pagerService.getPager(this.totalBookCopies, page, 10);

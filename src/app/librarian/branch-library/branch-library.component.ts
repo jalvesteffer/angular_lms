@@ -151,7 +151,7 @@ export class BranchLibraryComponent implements OnInit {
   }
 
   setPage(page: number) {
-    if (page < 1 || page > this.pager.totalAuthors) {
+    if (page < 1 || page > this.pager.totalBranches) {
       return;
     }
     this.pager = this.pagerService.getPager(this.totalBranches, page, 10);

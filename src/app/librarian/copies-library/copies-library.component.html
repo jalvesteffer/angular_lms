@@ -5,7 +5,8 @@
 <!-- start of book copies container -->
 <div class="container marketing">
   <h2>Total number of records that matched the request are {{ totalBookCopies }} as of {{ today | date: "short" }}</h2>
-
+  <h3><button type="button" class="btn btn-primary" (click)="open(addBranchModal, null)">Add Book</button></h3>
+  
   <!-- Sort by Book -->
   <div class="row">
     <div class="col-lg-8"></div>
@@ -61,12 +62,61 @@
   </table>
 </div>
 
+<ng-template #addBookCopiesModal let-c="close" let-d="dismiss">
+  <form [formGroup]="addBookCopiesForm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBookCopiesFormLabel">Add Book</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="c()"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <p>Library Branch Name:
+              <ng-multiselect-dropdown [placeholder]="'Select Branch'" [data]="totalBranches"
+                formControlName="branchName" [settings]="branchDropdownSettings" (onSelect)="onItemSelect($event)"
+                (onSelectAll)="onSelectAll($event)">
+              </ng-multiselect-dropdown>
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+            (click)="c()"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="addBookCopies()"
+            [disabled]="addBookCopiesForm.invalid"
+          >
+            Save changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
 <ng-template #updateBookCopiesModal let-c="close" let-d="dismiss">
   <form [formGroup]="updateBookCopiesForm">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Update  {{branchName}}'s {{title}} </h5>
+          <h5 class="modal-title" id="updateBookCopiesFormLabel">Update  {{branchName}}'s {{title}} </h5>
           <button
             type="button"
             class="close"
