@@ -11,6 +11,7 @@ export const environment = {
   createPublishersURI: '/publishers',
   createGenresURI: '/genres',
   createBorrowersURI: '/borrowers',
+  createBookCopiesURI: '/bookcopies',
   createBranchesURI: '/branches',
   readAuthorsURI: '/authors',
   readBooksURI: '/books',
