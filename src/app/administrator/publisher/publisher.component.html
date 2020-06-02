@@ -2,6 +2,15 @@
   <h2>Total number of Publishers in LMS are {{ totalPublishers }} as of {{ today | date: "short" }}</h2>
   <h3><button type="button" class="btn btn-primary" (click)="open(updatePublisherModal, null)">Add Publisher</button>
   </h3>
+
+  <!-- pagination -->
+  <div class="ds-l-row ds-u-margin-top--3">
+    <div class="ds-l-col--9">
+      <ngb-pagination [collectionSize]="totalPublishers" [(page)]="pager.currentPage" [maxSize]="5"
+        [boundaryLinks]="true" (pageChange)="setPage($event)"></ngb-pagination>
+    </div>
+  </div>
+
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
@@ -14,7 +23,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let p of publishers; let i = index">
+      <tr *ngFor="let p of pagedResults; let i = index">
         <td scope="row">{{ i+1 }}</td>
         <td>{{ p.publisherName }}</td>
         <td>{{ p.publisherAddress }}</td>

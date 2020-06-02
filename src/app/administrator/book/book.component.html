@@ -1,6 +1,15 @@
 <div class="container marketing">
   <h2>Total number of Books in LMS are {{ totalBooks }} as of {{ today | date: "short" }}</h2>
   <h3><button type="button" class="btn btn-primary" (click)="open(updateBookModal, null)">Add Book</button></h3>
+
+  <!-- pagination -->
+  <div class="ds-l-row ds-u-margin-top--3">
+    <div class="ds-l-col--9">
+      <ngb-pagination [collectionSize]="totalBooks" [(page)]="pager.currentPage" [maxSize]="5" [boundaryLinks]="true"
+        (pageChange)="setPage($event)"></ngb-pagination>
+    </div>
+  </div>
+
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
@@ -14,7 +23,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let b of books; let i = index">
+      <tr *ngFor="let b of pagedResults; let i = index">
         <th scope="row">{{ i+1 }}</th>
         <td>{{ b.title }}</td>
         <td><span *ngFor="let a of b.authors; let isLast=last">{{ a.authorName }}{{isLast ? '' : ', '}} </span></td>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
+import { PagerService } from "../../common/services/pager.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
@@ -37,8 +38,13 @@ export class BookComponent implements OnInit {
   genresDropdownSettings: any;
   publishersDropdownSettings: any;
 
+  // Pagination
+  pager: any = {};
+  pagedResults: any[];
+
   constructor(
     private lmsService: LmsService,
+    private pagerService: PagerService,
     private modalService: NgbModal,
     private fb: FormBuilder
   ) {
@@ -120,6 +126,7 @@ export class BookComponent implements OnInit {
       .subscribe((res) => {
         this.books = res;
         this.totalBooks = this.books.length;
+        this.setPage(1);
       },
         (error) => {
           console.log('Error with loadAllBooks');
@@ -233,6 +240,17 @@ export class BookComponent implements OnInit {
         this.errMsg = "";
         this.closeResult = `Dismissed`;
       }
+    );
+  }
+
+  setPage(page: number) {
+    if (page < 1 || page > this.pager.totalBooks) {
+      return;
+    }
+    this.pager = this.pagerService.getPager(this.totalBooks, page, 10);
+    this.pagedResults = this.books.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
     );
   }
 }

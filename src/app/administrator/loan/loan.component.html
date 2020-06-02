@@ -1,5 +1,14 @@
 <div class="container marketing">
   <h2>Total number of Overdue Loans in LMS are {{ totalLoans }} as of {{ today | date: "short" }}</h2>
+
+  <!-- pagination -->
+  <div class="ds-l-row ds-u-margin-top--3">
+    <div class="ds-l-col--9">
+      <ngb-pagination [collectionSize]="totalLoans" [(page)]="pager.currentPage" [maxSize]="5" [boundaryLinks]="true"
+        (pageChange)="setPage($event)"></ngb-pagination>
+    </div>
+  </div>
+
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
@@ -12,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let l of loans; let i = index">
+      <tr *ngFor="let l of pagedResults; let i = index">
         <td scope="row">{{ i+1 }}</td>
         <td>{{ l.borrower[0].name }}<br>Card #: {{ l.borrower[0].cardNo }} </td>
         <td>{{ l.book[0].title }}</td>

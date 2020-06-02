@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
+import { PagerService } from "../../common/services/pager.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
@@ -25,8 +26,13 @@ export class GenreComponent implements OnInit {
   totalBooks: any;
   dropdownSettings: any;
 
+  // Pagination
+  pager: any = {};
+  pagedResults: any[];
+
   constructor(
     private lmsService: LmsService,
+    private pagerService: PagerService,
     private modalService: NgbModal,
     private fb: FormBuilder
   ) {
@@ -67,6 +73,7 @@ export class GenreComponent implements OnInit {
       .subscribe((res) => {
         this.genres = res;
         this.totalGenres = this.genres.length;
+        this.setPage(1);
       },
         (error) => {
           ;
@@ -159,6 +166,17 @@ export class GenreComponent implements OnInit {
           ;
         }
       );
+  }
+
+  setPage(page: number) {
+    if (page < 1 || page > this.pager.totalGenres) {
+      return;
+    }
+    this.pager = this.pagerService.getPager(this.totalGenres, page, 10);
+    this.pagedResults = this.genres.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
   }
 }
 
