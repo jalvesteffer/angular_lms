@@ -1,6 +1,15 @@
 <div class="container marketing">
   <h2>Total number of Authors in LMS are {{ totalAuthors }} as of {{ today | date: "short" }}</h2>
   <h3><button type="button" class="btn btn-primary" (click)="open(updateAuthorModal, null)">Add Author</button></h3>
+
+  <!-- pagination -->
+  <div class="ds-l-row ds-u-margin-top--3">
+    <div class="ds-l-col--9">
+      <ngb-pagination [collectionSize]="totalAuthors" [(page)]="pager.currentPage" [maxSize]="5" [boundaryLinks]="true"
+        (pageChange)="setPage($event)"></ngb-pagination>
+    </div>
+  </div>
+
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
@@ -12,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let a of authors; let i = index">
+      <tr *ngFor="let a of pagedResults; let i = index">
         <th scope="row">{{ i+1 }}</th>
         <td>{{ a.authorName }}</td>
         <td><span *ngFor="let b of a.books; let isLast=last">{{ b.title }}{{isLast ? '' : ', '}} </span></td>
@@ -35,10 +44,10 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-            Enter Author Name:
-            <input class="form-control" id="authorName" formControlName="authorName" [ngClass]="{
+            <p>Author Name:
+              <input class="form-control" id="authorName" formControlName="authorName" [ngClass]="{
                 'is-invalid': updateAuthorForm.controls['authorName'].errors
-              }" />
+              }" /></p>
             <div *ngIf="updateAuthorForm.controls['authorName'].errors" class="error-msg">
               <div [hidden]="
                   !updateAuthorForm.controls['authorName'].errors.required
@@ -52,9 +61,11 @@
                 Author Name should be between 3-45 chars in length
               </div>
             </div>
-            <ng-multiselect-dropdown [placeholder]="'Select Books(s)'" [data]="totalBooks" formControlName="books"
-              [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">
-            </ng-multiselect-dropdown>
+            <p>Books Written:
+              <ng-multiselect-dropdown [placeholder]="'Select Books(s)'" [data]="totalBooks" formControlName="books"
+                [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">
+              </ng-multiselect-dropdown>
+            </p>
           </div>
         </div>
         <div class="modal-footer">

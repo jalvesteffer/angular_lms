@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
+import { PagerService } from "../../common/services/pager.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
@@ -25,8 +26,13 @@ export class PublisherComponent implements OnInit {
   publisherPhone: string;
   dropdownSettings: any;
 
+  // Pagination
+  pager: any = {};
+  pagedResults: any[];
+
   constructor(
     private lmsService: LmsService,
+    private pagerService: PagerService,
     private modalService: NgbModal,
     private fb: FormBuilder
   ) {
@@ -66,6 +72,7 @@ export class PublisherComponent implements OnInit {
       .subscribe((res) => {
         this.publishers = res;
         this.totalPublishers = this.publishers.length;
+        this.setPage(1);
       },
         (error) => {
           console.log("Error with loadAllPublishers");
@@ -146,6 +153,17 @@ export class PublisherComponent implements OnInit {
         this.errMsg = "";
         this.closeResult = `Dismissed`;
       }
+    );
+  }
+
+  setPage(page: number) {
+    if (page < 1 || page > this.pager.totalPublishers) {
+      return;
+    }
+    this.pager = this.pagerService.getPager(this.totalPublishers, page, 10);
+    this.pagedResults = this.publishers.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
     );
   }
 }

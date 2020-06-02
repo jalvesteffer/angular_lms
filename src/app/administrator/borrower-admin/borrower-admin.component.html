@@ -2,6 +2,15 @@
   <h2>Total number of Borrowers in LMS are {{ totalBorrowers }} as of {{ today | date: "short" }}</h2>
   <h3><button type="button" class="btn btn-primary" (click)="open(updateBorrowerModal, null)">Add Borrower</button>
   </h3>
+
+  <!-- pagination -->
+  <div class="ds-l-row ds-u-margin-top--3">
+    <div class="ds-l-col--9">
+      <ngb-pagination [collectionSize]="totalBorrowers" [(page)]="pager.currentPage" [maxSize]="5"
+        [boundaryLinks]="true" (pageChange)="setPage($event)"></ngb-pagination>
+    </div>
+  </div>
+
   <table class="table table-bordered table-dark">
     <thead>
       <tr>
@@ -14,7 +23,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let b of borrowers; let i = index">
+      <tr *ngFor="let b of pagedResults; let i = index">
         <td scope="row">{{ i+1 }}</td>
         <td>{{ b.name }}</td>
         <td>{{ b.address }}</td>

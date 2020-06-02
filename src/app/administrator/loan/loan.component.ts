@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
+import { PagerService } from "../../common/services/pager.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
@@ -26,10 +27,13 @@ export class LoanComponent implements OnInit {
   errMsg: any;
   closeResult: any;
 
-
+  // Pagination
+  pager: any = {};
+  pagedResults: any[];
 
   constructor(
     private lmsService: LmsService,
+    private pagerService: PagerService,
     private modalService: NgbModal,
     private fb: FormBuilder
   ) { }
@@ -43,6 +47,7 @@ export class LoanComponent implements OnInit {
       .subscribe((res) => {
         this.loans = res;
         this.totalLoans = this.loans.length;
+        this.setPage(1);
       },
         (error) => {
           console.log("Error with loadAllOverdueLoans");
@@ -67,4 +72,14 @@ export class LoanComponent implements OnInit {
       );
   }
 
+  setPage(page: number) {
+    if (page < 1 || page > this.pager.totalLoans) {
+      return;
+    }
+    this.pager = this.pagerService.getPager(this.totalLoans, page, 10);
+    this.pagedResults = this.loans.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
 }

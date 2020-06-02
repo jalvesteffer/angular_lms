@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
+import { PagerService } from "../../common/services/pager.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
@@ -24,8 +25,13 @@ export class BranchComponent implements OnInit {
   branchAddress: string;
   dropdownSettings: any;
 
+  // Pagination
+  pager: any = {};
+  pagedResults: any[];
+
   constructor(
     private lmsService: LmsService,
+    private pagerService: PagerService,
     private modalService: NgbModal,
     private fb: FormBuilder
   ) {
@@ -64,6 +70,7 @@ export class BranchComponent implements OnInit {
       .subscribe((res) => {
         this.branches = res;
         this.totalBranches = this.branches.length;
+        this.setPage(1);
       },
         (error) => {
           console.log("Error with loadAllBranches");
@@ -141,6 +148,17 @@ export class BranchComponent implements OnInit {
         this.errMsg = "";
         this.closeResult = `Dismissed`;
       }
+    );
+  }
+
+  setPage(page: number) {
+    if (page < 1 || page > this.pager.totalBranches) {
+      return;
+    }
+    this.pager = this.pagerService.getPager(this.totalBranches, page, 10);
+    this.pagedResults = this.branches.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
     );
   }
 }

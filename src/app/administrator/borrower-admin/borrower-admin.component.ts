@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LmsService } from "../../common/services/lms.service";
+import { PagerService } from "../../common/services/pager.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
@@ -29,8 +30,13 @@ export class BorrowerAdminComponent implements OnInit {
 
   dropdownSettings: any;
 
+  // Pagination
+  pager: any = {};
+  pagedResults: any[];
+
   constructor(
     private lmsService: LmsService,
+    private pagerService: PagerService,
     private modalService: NgbModal,
     private fb: FormBuilder
   ) {
@@ -70,6 +76,7 @@ export class BorrowerAdminComponent implements OnInit {
       .subscribe((res) => {
         this.borrowers = res;
         this.totalBorrowers = this.borrowers.length;
+        this.setPage(1);
       },
         (error) => {
           console.log("Error with loadAllBorrowers");
@@ -150,6 +157,17 @@ export class BorrowerAdminComponent implements OnInit {
         this.errMsg = "";
         this.closeResult = `Dismissed`;
       }
+    );
+  }
+
+  setPage(page: number) {
+    if (page < 1 || page > this.pager.totalBorrowers) {
+      return;
+    }
+    this.pager = this.pagerService.getPager(this.totalBorrowers, page, 10);
+    this.pagedResults = this.borrowers.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
     );
   }
 }
