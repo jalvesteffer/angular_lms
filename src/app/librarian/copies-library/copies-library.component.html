@@ -50,8 +50,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let b of pagedBookCopies | titleSort; let i = index ">
-        <th scope="row">{{ i+1 }}</th>
+      <tr *ngFor="let b of pagedBookCopies; let i = index">
+        <th scope="row">{{ (pageSize * (pager.currentPage -1)) + (i+1) }}</th>
         <td>{{ b.title }}</td>
         <td>{{ b.branchName }}</td>
         <td>{{ b.noOfCopies}}</td>

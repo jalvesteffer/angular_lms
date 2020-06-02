@@ -35,6 +35,7 @@ export class BranchLibraryComponent implements OnInit {
   //pagnation
   pager: any = {};
   pagedBranch: any[];
+  pageSize: number = 10;
 
   constructor(private lmsService: LmsService, private pagerService: PagerService, private fb: FormBuilder,private modalService: NgbModal) { }
 
@@ -154,7 +155,7 @@ export class BranchLibraryComponent implements OnInit {
     if (page < 1 || page > this.pager.totalBranches) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalBranches, page, 10);
+    this.pager = this.pagerService.getPager(this.totalBranches, page, this.pageSize);
     this.pagedBranch = this.branches.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1
