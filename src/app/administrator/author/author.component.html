@@ -42,7 +42,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let a of pagedResults | authorSort; let i = index">
-        <th scope="row">{{ i+1 }}</th>
+        <th scope="row">{{ (pageSize * (pager.currentPage - 1)) + (i + 1) }}</th>
         <td>{{ a.authorName }}</td>
         <td><span *ngFor="let b of a.books; let isLast=last">{{ b.title }}{{isLast ? '' : ', '}} </span></td>
         <td><button type="button" class="btn btn-secondary" (click)="(open(updateAuthorModal, a))">Edit</button></td>
