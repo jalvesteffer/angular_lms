@@ -1,5 +1,25 @@
+<!-- font awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<script src="https://use.fontawesome.com/ca9c43d64a.js"></script>
+<!-- start of container -->
 <div class="container marketing">
   <h2>Total number of Authors in LMS are {{ totalAuthors }} as of {{ today | date: "short" }}</h2>
+
+  <!-- Sort by Name -->
+  <div class="row">
+    <div class="col-lg-8"></div>
+    <div class="col-lg-4">
+      <form [formGroup]="searchForm" class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+        <i class="fas fa-search"></i>
+        <input type="text" class="form-control form-control-sm ml-3 w-75" formControlName="searchString"
+          (input)="search()" placeholder="Search By Author Name" aria-label="Search By Author Name" />
+      </form>
+    </div>
+  </div>
+  <br>
+
+
+
   <h3><button type="button" class="btn btn-primary" (click)="open(updateAuthorModal, null)">Add Author</button></h3>
 
   <!-- pagination -->
@@ -21,7 +41,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let a of pagedResults; let i = index">
+      <tr *ngFor="let a of pagedResults | authorSort; let i = index">
         <th scope="row">{{ i+1 }}</th>
         <td>{{ a.authorName }}</td>
         <td><span *ngFor="let b of a.books; let isLast=last">{{ b.title }}{{isLast ? '' : ', '}} </span></td>
