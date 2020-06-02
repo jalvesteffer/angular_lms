@@ -26,6 +26,10 @@ export class GenreComponent implements OnInit {
   totalBooks: any;
   dropdownSettings: any;
 
+  // Sort
+  searchForm: FormGroup;
+  searchString: string;
+
   // Pagination
   pager: any = {};
   pagedResults: any[];
@@ -66,6 +70,35 @@ export class GenreComponent implements OnInit {
       genre_id: new FormControl(this.genre_id),
       books: new FormControl(this.books),
     });
+
+    this.searchForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
+    });
+  }
+
+  search() {
+    let searchString = this.searchForm.value.searchString;
+    let dash = "/";
+    if (searchString.length != "") {
+      this.lmsService
+        .getAll(
+          `${environment.appUrl}${environment.readGenresURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.genres = res;
+            this.totalGenres = this.genres.length;
+            this.searchString = "";
+            this.setPage(1);
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+    } else {
+      this.searchString = "";
+      this.loadAllGenres();
+    }
   }
 
   loadAllGenres() {

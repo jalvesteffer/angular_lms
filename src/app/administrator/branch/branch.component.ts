@@ -25,6 +25,10 @@ export class BranchComponent implements OnInit {
   branchAddress: string;
   dropdownSettings: any;
 
+  // Sort
+  searchForm: FormGroup;
+  searchString: string;
+
   // Pagination
   pager: any = {};
   pagedResults: any[];
@@ -63,6 +67,35 @@ export class BranchComponent implements OnInit {
       branchId: new FormControl(this.branchId),
       branchAddress: new FormControl(this.branchAddress)
     });
+
+    this.searchForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
+    });
+  }
+
+  search() {
+    let searchString = this.searchForm.value.searchString;
+    let dash = "/";
+    if (searchString.length != "") {
+      this.lmsService
+        .getAll(
+          `${environment.appUrl}${environment.readBranchesURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.branches = res;
+            this.totalBranches = this.branches.length;
+            this.searchString = "";
+            this.setPage(1);
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+    } else {
+      this.searchString = "";
+      this.loadAllBranches();
+    }
   }
 
   loadAllBranches() {

@@ -26,6 +26,10 @@ export class AuthorComponent implements OnInit {
   totalBooks: any;
   dropdownSettings: any;
 
+  // Sort
+  searchForm: FormGroup;
+  searchString: string;
+
   // Pagination
   pager: any = {};
   pagedResults: any[];
@@ -69,6 +73,34 @@ export class AuthorComponent implements OnInit {
       books: new FormControl(this.books),
     });
 
+    this.searchForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
+    });
+  }
+
+  search() {
+    let searchString = this.searchForm.value.searchString;
+    let dash = "/";
+    if (searchString.length != "") {
+      this.lmsService
+        .getAll(
+          `${environment.appUrl}${environment.readAuthorsURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.authors = res;
+            this.totalAuthors = this.authors.length;
+            this.searchString = "";
+            this.setPage(1);
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+    } else {
+      this.searchString = "";
+      this.loadAllAuthors();
+    }
   }
 
   loadAllAuthors() {

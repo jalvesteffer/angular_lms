@@ -27,6 +27,10 @@ export class LoanComponent implements OnInit {
   errMsg: any;
   closeResult: any;
 
+  // Sort
+  searchForm: FormGroup;
+  searchString: string;
+
   // Pagination
   pager: any = {};
   pagedResults: any[];
@@ -40,6 +44,38 @@ export class LoanComponent implements OnInit {
 
   ngOnInit() {
     this.loadAllOverdueLoans();
+    this.initializeFormGroup();
+  }
+
+  initializeFormGroup() {
+    this.searchForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
+    });
+  }
+
+  search() {
+    let searchString = this.searchForm.value.searchString;
+    let dash = "/";
+    if (searchString.length != "") {
+      this.lmsService
+        .getAll(
+          `${environment.appUrl}${environment.readOverdueLoansURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.loans = res;
+            this.totalLoans = this.loans.length;
+            this.searchString = "";
+            this.setPage(1);
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+    } else {
+      this.searchString = "";
+      this.loadAllOverdueLoans();
+    }
   }
 
   loadAllOverdueLoans() {
