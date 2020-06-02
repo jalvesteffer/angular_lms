@@ -5,7 +5,7 @@
 <!-- start of book copies container -->
 <div class="container marketing">
   <h2>Total number of records that matched the request are {{ totalBookCopies }} as of {{ today | date: "short" }}</h2>
-  <h3><button type="button" class="btn btn-primary" (click)="open(addBranchModal, null)">Add Book</button></h3>
+  <h3><button type="button" class="btn btn-primary" (click)="open(addBookCopiesModal, null)">Add Book</button></h3>
   
   <!-- Sort by Book -->
   <div class="row">
@@ -81,11 +81,46 @@
         <div class="modal-body">
           <div class="form-group">
             <p>Library Branch Name:
-              <ng-multiselect-dropdown [placeholder]="'Select Branch'" [data]="totalBranches"
-                formControlName="branchName" [settings]="branchDropdownSettings" (onSelect)="onItemSelect($event)"
-                (onSelectAll)="onSelectAll($event)">
+              <ng-multiselect-dropdown [placeholder]="'Select Branch'" [data]="totalBranches | branchSort"
+                formControlName="branchName" [settings]="branchDropdownSettings" (onSelect)="onBranchSelect($event)">
               </ng-multiselect-dropdown>
             </p>
+            <p>Book Title:
+              <ng-multiselect-dropdown  [placeholder]="'Select Book'" [data]="totalBooks | titleSort"
+                formControlName="title" [settings]="bookDropdownSettings">
+              </ng-multiselect-dropdown>
+            </p>
+           
+              Enter Number of Book Copies:
+            <input
+              class="form-control"
+              id="noOfCopies"
+              formControlName="noOfCopies"
+              [ngClass]="{
+                'is-invalid': updateBookCopiesForm.controls['noOfCopies'].errors
+              }"
+            />
+            <div
+              *ngIf="updateBookCopiesForm.controls['noOfCopies'].errors"
+              class="error-msg"
+            >
+              <div
+                [hidden]="
+                  !updateBookCopiesForm.controls['noOfCopies'].errors.required
+                "
+              >
+              Number of Book Copies is required
+              </div>
+              <div
+                [hidden]="
+                  updateBookCopiesForm.controls['noOfCopies'].errors.maxLength ||
+                  updateBookCopiesForm.controls['noOfCopies'].errors.minLength
+                "
+              >
+              Number of Book Copies should zero or more
+              </div>
+            </div>
+            
           </div>
         </div>
         <div class="modal-footer">

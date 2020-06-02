@@ -51,7 +51,7 @@ export class CopiesLibraryComponent implements OnInit {
   constructor(private lmsService: LmsService, private pagerService: PagerService, private fb: FormBuilder,private modalService: NgbModal)  
     {
       this.branchDropdownSettings = {
-        singleSelection: false,
+        singleSelection: true,
         idField: "branchId",
         textField: "branchName",
         selectAllText: "Select All",
@@ -61,7 +61,7 @@ export class CopiesLibraryComponent implements OnInit {
       };
   
       this.bookDropdownSettings = {
-        singleSelection: false,
+        singleSelection: true,
         idField: "bookId",
         textField: "title",
         selectAllText: "Select All",
@@ -91,7 +91,14 @@ export class CopiesLibraryComponent implements OnInit {
       searchString: new FormControl(this.searchString),
     });
     this.addBookCopiesForm = new FormGroup({
-    branchName: new FormControl(this.branchName)
+      bookId: new FormControl(this.bookId),
+      branchName: new FormControl(this.branchName),
+      branchId: new FormControl(this.branchName),
+      title: new FormControl(this.title),
+      noOfCopies: new FormControl(this.noOfCopies, [
+        Validators.required,
+        Validators.min(0),
+      ]),
   });
   }
 
@@ -101,7 +108,6 @@ export class CopiesLibraryComponent implements OnInit {
         this.bookCopies = res;
         this.totalBookCopies = this.bookCopies.length;
         this.setPage(1);
-        console.log(this.bookCopies);
 
         this.loadAllBranches();
       },
@@ -127,7 +133,6 @@ export class CopiesLibraryComponent implements OnInit {
     this.lmsService.getAll(`${environment.libraryUrl}${environment.readBooksURI}`)
       .subscribe((res) => {
         this.totalBooks = res;
-        console.log(this.totalBooks);
       },
         (error) => {
           ;
@@ -160,6 +165,18 @@ export class CopiesLibraryComponent implements OnInit {
       }
   }
 
+  onBranchSelect(b){
+    let dash = "/";
+    this.lmsService.getAll(`${environment.libraryUrl}${environment.readBooksURI}${dash}${b.branchId}`)
+      .subscribe((res) => {
+        this.totalBooks = res;
+      },
+        (error) => {
+          ;
+        }
+      );
+  }
+
   updateBookCopies() {
     const bookCopy = {
       bookId: this.updateBookCopiesForm.value.bookId,
@@ -167,6 +184,24 @@ export class CopiesLibraryComponent implements OnInit {
       noOfCopies: this.updateBookCopiesForm.value.noOfCopies
     }
     this.lmsService.updateObj(`${environment.libraryUrl}${environment.updateBookCopiesURI}`, bookCopy)
+      .subscribe((res) => {
+        this.loadAllCopies();
+        this.modalService.dismissAll();
+      },
+        (error) => {
+        }
+      );
+  }
+
+  addBookCopies() {
+    const bookCopy = {
+      bookId: this.addBookCopiesForm.value.title[0].bookId,
+      branchId: this.addBookCopiesForm.value.branchName[0].branchId,
+      branchName: this.addBookCopiesForm.value.branchName[0].branchName,
+      title: this.addBookCopiesForm.value.title[0].title,
+      noOfCopies: this.addBookCopiesForm.value.noOfCopies
+    }
+    this.lmsService.postObj(`${environment.libraryUrl}${environment.updateBookCopiesURI}`, bookCopy)
       .subscribe((res) => {
         this.loadAllCopies();
         this.modalService.dismissAll();
@@ -184,6 +219,13 @@ export class CopiesLibraryComponent implements OnInit {
         noOfCopies: obj.noOfCopies,
         branchId: obj.branchId,
         bookId: obj.bookId,
+      }),
+      this.addBookCopiesForm = this.fb.group({
+        branchName: obj.branchName,
+        branchId: obj.branchId,
+        bookId: obj.bookId,
+        title: obj.title,
+        noOfCopies: obj.noOfCopies,
       })
     }else{
       this.branchName = "",
@@ -192,6 +234,13 @@ export class CopiesLibraryComponent implements OnInit {
         noOfCopies: null,
         branchId: null,
         bookId: null,
+      }),
+      this.addBookCopiesForm = this.fb.group({
+        branchName: null,
+        branchId: null,
+        bookId: null,
+        title: null,
+        noOfCopies: null,
       })
     }
 
