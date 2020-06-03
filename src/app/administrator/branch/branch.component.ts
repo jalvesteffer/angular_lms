@@ -32,6 +32,7 @@ export class BranchComponent implements OnInit {
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -188,7 +189,7 @@ export class BranchComponent implements OnInit {
     if (page < 1 || page > this.pager.totalBranches) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalBranches, page, 10);
+    this.pager = this.pagerService.getPager(this.totalBranches, page, this.pageSize);
     this.pagedResults = this.branches.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1

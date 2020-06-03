@@ -34,6 +34,7 @@ export class LoanComponent implements OnInit {
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -112,7 +113,7 @@ export class LoanComponent implements OnInit {
     if (page < 1 || page > this.pager.totalLoans) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalLoans, page, 10);
+    this.pager = this.pagerService.getPager(this.totalLoans, page, this.pageSize);
     this.pagedResults = this.loans.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1

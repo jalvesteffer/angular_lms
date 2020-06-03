@@ -41,7 +41,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let g of pagedResults | genreSort; let i = index">
-        <td scope="row">{{ i+1 }}</td>
+        <td scope="row">{{ (pageSize * (pager.currentPage - 1)) + (i + 1) }}</td>
         <td>{{ g.genre_name }}</td>
         <td><span *ngFor="let b of g.books; let isLast=last">{{ b.title }}{{isLast ? '' : ', '}} </span></td>
         <td><button type="button" class="btn btn-secondary" (click)="(open(updateGenreModal, g))">Edit</button></td>

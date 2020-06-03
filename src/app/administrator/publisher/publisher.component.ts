@@ -33,6 +33,7 @@ export class PublisherComponent implements OnInit {
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -193,7 +194,7 @@ export class PublisherComponent implements OnInit {
     if (page < 1 || page > this.pager.totalPublishers) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalPublishers, page, 10);
+    this.pager = this.pagerService.getPager(this.totalPublishers, page, this.pageSize);
     this.pagedResults = this.publishers.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1

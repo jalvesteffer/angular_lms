@@ -43,7 +43,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let b of pagedResults | titleSort; let i = index">
-        <th scope="row">{{ i+1 }}</th>
+        <th scope="row">{{ (pageSize * (pager.currentPage - 1)) + (i + 1) }}</th>
         <td>{{ b.title }}</td>
         <td><span *ngFor="let a of b.authors; let isLast=last">{{ a.authorName }}{{isLast ? '' : ', '}} </span></td>
         <td><span *ngFor="let p of b.publisher; let isLast=last">{{ p.publisherName }} </span></td>
