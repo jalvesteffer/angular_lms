@@ -39,6 +39,7 @@ export class CopiesLibraryComponent implements OnInit {
   //pagnation
   pager: any = {};
   pagedBookCopies: any[];
+  pageSize: number = 10;
 
   //branchs
   totalBranches: any;
@@ -261,7 +262,7 @@ export class CopiesLibraryComponent implements OnInit {
     if (page < 1 || page > this.pager.totalBookCopies) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalBookCopies, page, 10);
+    this.pager = this.pagerService.getPager(this.totalBookCopies, page, this.pageSize);
     this.pagedBookCopies = this.bookCopies.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1

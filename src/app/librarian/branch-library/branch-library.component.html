@@ -46,8 +46,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let b of pagedBranch | branchSort; let i = index">
-        <th scope="row">{{ i+1 }}</th>
+      <tr *ngFor="let b of pagedBranch; let i = index">
+        <th scope="row">{{ (pageSize * (pager.currentPage -1)) + (i+1) }}</th>
         <td>{{ b.branchName }}</td>
         <td>{{ b.branchAddress }}</td>
         <td></td>
