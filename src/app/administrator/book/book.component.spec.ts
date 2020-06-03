@@ -28,6 +28,13 @@ import {
   HttpTestingController,
 } from "@angular/common/http/testing";
 
+@Pipe({
+  name: 'titleSort'
+})
+export class MockBookCopiesSortPipe implements PipeTransform {
+  transform(input: any[]): any {}
+}
+
 //Mock modal reference class
 export class MockNgbModalRef {
   result: Promise<any> = new Promise((resolve, reject) => resolve("x"));
@@ -44,7 +51,7 @@ describe('BookComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BookComponent ],
+      declarations: [ BookComponent, MockBookCopiesSortPipe ],
       imports: [
         NgbModule,
         ReactiveFormsModule,
