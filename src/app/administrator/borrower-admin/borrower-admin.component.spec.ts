@@ -28,6 +28,13 @@ import {
   HttpTestingController,
 } from "@angular/common/http/testing";
 
+@Pipe({
+  name: 'borrowerSort'
+})
+export class MockBorrowersortPipe implements PipeTransform {
+  transform(input: any[]): any {}
+}
+
 //Mock modal reference class
 export class MockNgbModalRef {
   result: Promise<any> = new Promise((resolve, reject) => resolve("x"));
@@ -44,7 +51,7 @@ describe('BorrowerAdminComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BorrowerAdminComponent ],
+      declarations: [ BorrowerAdminComponent, MockBorrowersortPipe ],
       imports: [
         NgbModule,
         ReactiveFormsModule,
