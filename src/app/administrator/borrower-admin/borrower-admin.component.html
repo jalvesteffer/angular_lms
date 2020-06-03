@@ -43,7 +43,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let b of pagedResults | borrowerSort; let i = index">
-        <td scope="row">{{ i+1 }}</td>
+        <td scope="row">{{ (pageSize * (pager.currentPage - 1)) + (i + 1) }}</td>
         <td>{{ b.name }}</td>
         <td>{{ b.address }}</td>
         <td>{{ b.phone }}</td>

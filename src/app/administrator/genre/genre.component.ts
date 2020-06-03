@@ -33,6 +33,7 @@ export class GenreComponent implements OnInit {
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -205,7 +206,7 @@ export class GenreComponent implements OnInit {
     if (page < 1 || page > this.pager.totalGenres) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalGenres, page, 10);
+    this.pager = this.pagerService.getPager(this.totalGenres, page, this.pageSize);
     this.pagedResults = this.genres.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1

@@ -47,6 +47,7 @@ export class BookComponent implements OnInit {
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -289,7 +290,7 @@ export class BookComponent implements OnInit {
     if (page < 1 || page > this.pager.totalBooks) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalBooks, page, 10);
+    this.pager = this.pagerService.getPager(this.totalBooks, page, this.pageSize);
     this.pagedResults = this.books.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1

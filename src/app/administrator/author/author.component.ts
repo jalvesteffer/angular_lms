@@ -3,7 +3,7 @@ import { LmsService } from "../../common/services/lms.service";
 import { PagerService } from "../../common/services/pager.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
+import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-author',
@@ -33,6 +33,7 @@ export class AuthorComponent implements OnInit {
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -206,7 +207,7 @@ export class AuthorComponent implements OnInit {
     if (page < 1 || page > this.pager.totalAuthors) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalAuthors, page, 10);
+    this.pager = this.pagerService.getPager(this.totalAuthors, page, this.pageSize);
     this.pagedResults = this.authors.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1
