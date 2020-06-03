@@ -1,5 +1,22 @@
+<!-- font awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<script src="https://use.fontawesome.com/ca9c43d64a.js"></script>
+<!-- start of container -->
 <div class="container marketing">
   <h2>Total number of Overdue Loans in LMS are {{ totalLoans }} as of {{ today | date: "short" }}</h2>
+
+  <!-- Sort by Name -->
+  <div class="row">
+    <div class="col-lg-8"></div>
+    <div class="col-lg-4">
+      <form [formGroup]="searchForm" class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+        <i class="fas fa-search"></i>
+        <input type="text" class="form-control form-control-sm ml-3 w-75" formControlName="searchString"
+          (input)="search()" placeholder="Search By Card Number" aria-label="Search By Card Number" />
+      </form>
+    </div>
+  </div>
+  <br>
 
   <!-- pagination -->
   <div class="ds-l-row ds-u-margin-top--3">
@@ -22,7 +39,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let l of pagedResults; let i = index">
-        <td scope="row">{{ i+1 }}</td>
+        <td scope="row">{{ (pageSize * (pager.currentPage - 1)) + (i + 1) }}</td>
         <td>{{ l.borrower[0].name }}<br>Card #: {{ l.borrower[0].cardNo }} </td>
         <td>{{ l.book[0].title }}</td>
         <td>{{ l.branch[0].branchName }}</td>

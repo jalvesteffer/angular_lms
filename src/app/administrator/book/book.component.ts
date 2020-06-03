@@ -5,6 +5,7 @@ import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
 import { log } from 'util';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 @Component({
   selector: 'app-book',
@@ -25,6 +26,7 @@ export class BookComponent implements OnInit {
   authors: any;
   books: any;
   publisher: any;
+  publisherVal: any; // used for null check in updateBook()
   genres: any;
 
   today = new Date();
@@ -38,9 +40,14 @@ export class BookComponent implements OnInit {
   genresDropdownSettings: any;
   publishersDropdownSettings: any;
 
+  // Sort
+  searchForm: FormGroup;
+  searchString: string;
+
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -98,6 +105,35 @@ export class BookComponent implements OnInit {
       publisher: new FormControl(this.publisher),
       genres: new FormControl(this.genres)
     });
+
+    this.searchForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
+    });
+  }
+
+  search() {
+    let searchString = this.searchForm.value.searchString;
+    let dash = "/";
+    if (searchString.length != "") {
+      this.lmsService
+        .getAll(
+          `${environment.appUrl}${environment.readBooksURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.books = res;
+            this.totalBooks = this.books.length;
+            this.searchString = "";
+            this.setPage(1);
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+    } else {
+      this.searchString = "";
+      this.loadAllBooks();
+    }
   }
 
   ngAfterViewInit() { }
@@ -170,10 +206,17 @@ export class BookComponent implements OnInit {
   }
 
   updateBook() {
+    // check for null value before getting publisherId at [0] index
+    if (!this.updateBookForm.value.publisher) {
+      this.publisherVal = null;
+    } else {
+      this.publisherVal = this.updateBookForm.value.publisher[0].publisherId;
+    }
+
     const book = {
       bookId: this.updateBookForm.value.bookId,
       title: this.updateBookForm.value.title,
-      pubId: this.updateBookForm.value.publisher[0].publisherId,
+      pubId: this.publisherVal,
       authors: this.updateBookForm.value.authors,
       genres: this.updateBookForm.value.genres
     }
@@ -247,7 +290,7 @@ export class BookComponent implements OnInit {
     if (page < 1 || page > this.pager.totalBooks) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalBooks, page, 10);
+    this.pager = this.pagerService.getPager(this.totalBooks, page, this.pageSize);
     this.pagedResults = this.books.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1

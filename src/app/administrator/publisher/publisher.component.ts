@@ -26,9 +26,14 @@ export class PublisherComponent implements OnInit {
   publisherPhone: string;
   dropdownSettings: any;
 
+  // Sort
+  searchForm: FormGroup;
+  searchString: string;
+
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -65,6 +70,35 @@ export class PublisherComponent implements OnInit {
       publisherAddress: new FormControl(this.publisherAddress),
       publisherPhone: new FormControl(this.publisherPhone)
     });
+
+    this.searchForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
+    });
+  }
+
+  search() {
+    let searchString = this.searchForm.value.searchString;
+    let dash = "/";
+    if (searchString.length != "") {
+      this.lmsService
+        .getAll(
+          `${environment.appUrl}${environment.readPublishersURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.publishers = res;
+            this.totalPublishers = this.publishers.length;
+            this.searchString = "";
+            this.setPage(1);
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+    } else {
+      this.searchString = "";
+      this.loadAllPublishers();
+    }
   }
 
   loadAllPublishers() {
@@ -160,7 +194,7 @@ export class PublisherComponent implements OnInit {
     if (page < 1 || page > this.pager.totalPublishers) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalPublishers, page, 10);
+    this.pager = this.pagerService.getPager(this.totalPublishers, page, this.pageSize);
     this.pagedResults = this.publishers.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1

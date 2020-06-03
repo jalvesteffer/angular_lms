@@ -25,9 +25,14 @@ export class BranchComponent implements OnInit {
   branchAddress: string;
   dropdownSettings: any;
 
+  // Sort
+  searchForm: FormGroup;
+  searchString: string;
+
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -63,6 +68,35 @@ export class BranchComponent implements OnInit {
       branchId: new FormControl(this.branchId),
       branchAddress: new FormControl(this.branchAddress)
     });
+
+    this.searchForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
+    });
+  }
+
+  search() {
+    let searchString = this.searchForm.value.searchString;
+    let dash = "/";
+    if (searchString.length != "") {
+      this.lmsService
+        .getAll(
+          `${environment.appUrl}${environment.readBranchesURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.branches = res;
+            this.totalBranches = this.branches.length;
+            this.searchString = "";
+            this.setPage(1);
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+    } else {
+      this.searchString = "";
+      this.loadAllBranches();
+    }
   }
 
   loadAllBranches() {
@@ -155,7 +189,7 @@ export class BranchComponent implements OnInit {
     if (page < 1 || page > this.pager.totalBranches) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalBranches, page, 10);
+    this.pager = this.pagerService.getPager(this.totalBranches, page, this.pageSize);
     this.pagedResults = this.branches.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1

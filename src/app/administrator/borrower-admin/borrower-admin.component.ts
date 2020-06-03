@@ -30,9 +30,14 @@ export class BorrowerAdminComponent implements OnInit {
 
   dropdownSettings: any;
 
+  // Sort
+  searchForm: FormGroup;
+  searchString: string;
+
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -69,6 +74,35 @@ export class BorrowerAdminComponent implements OnInit {
       address: new FormControl(this.address),
       phone: new FormControl(this.phone)
     });
+
+    this.searchForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
+    });
+  }
+
+  search() {
+    let searchString = this.searchForm.value.searchString;
+    let dash = "/";
+    if (searchString.length != "") {
+      this.lmsService
+        .getAll(
+          `${environment.appUrl}${environment.readBorrowersURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.borrowers = res;
+            this.totalBorrowers = this.borrowers.length;
+            this.searchString = "";
+            this.setPage(1);
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+    } else {
+      this.searchString = "";
+      this.loadAllBorrowers();
+    }
   }
 
   loadAllBorrowers() {
@@ -164,7 +198,7 @@ export class BorrowerAdminComponent implements OnInit {
     if (page < 1 || page > this.pager.totalBorrowers) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalBorrowers, page, 10);
+    this.pager = this.pagerService.getPager(this.totalBorrowers, page, this.pageSize);
     this.pagedResults = this.borrowers.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1

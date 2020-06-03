@@ -3,7 +3,7 @@ import { LmsService } from "../../common/services/lms.service";
 import { PagerService } from "../../common/services/pager.service";
 import { environment } from "../../../environments/environment";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
+import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-author',
@@ -26,9 +26,14 @@ export class AuthorComponent implements OnInit {
   totalBooks: any;
   dropdownSettings: any;
 
+  // Sort
+  searchForm: FormGroup;
+  searchString: string;
+
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -69,6 +74,34 @@ export class AuthorComponent implements OnInit {
       books: new FormControl(this.books),
     });
 
+    this.searchForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
+    });
+  }
+
+  search() {
+    let searchString = this.searchForm.value.searchString;
+    let dash = "/";
+    if (searchString.length != "") {
+      this.lmsService
+        .getAll(
+          `${environment.appUrl}${environment.readAuthorsURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.authors = res;
+            this.totalAuthors = this.authors.length;
+            this.searchString = "";
+            this.setPage(1);
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+    } else {
+      this.searchString = "";
+      this.loadAllAuthors();
+    }
   }
 
   loadAllAuthors() {
@@ -174,7 +207,7 @@ export class AuthorComponent implements OnInit {
     if (page < 1 || page > this.pager.totalAuthors) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalAuthors, page, 10);
+    this.pager = this.pagerService.getPager(this.totalAuthors, page, this.pageSize);
     this.pagedResults = this.authors.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1

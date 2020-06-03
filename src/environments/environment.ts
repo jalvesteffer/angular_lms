@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  appUrl: 'http://localhost:3000/lms/admin',
+  appUrl: 'http://localhost:3001/lms/admin',
   libraryUrl: 'http://localhost:3000/lms/library',
   createAuthorsURI: '/authors',
   createBooksURI: '/books',

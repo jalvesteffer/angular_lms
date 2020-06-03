@@ -27,9 +27,14 @@ export class LoanComponent implements OnInit {
   errMsg: any;
   closeResult: any;
 
+  // Sort
+  searchForm: FormGroup;
+  searchString: string;
+
   // Pagination
   pager: any = {};
   pagedResults: any[];
+  pageSize: number = 10;
 
   constructor(
     private lmsService: LmsService,
@@ -40,6 +45,38 @@ export class LoanComponent implements OnInit {
 
   ngOnInit() {
     this.loadAllOverdueLoans();
+    this.initializeFormGroup();
+  }
+
+  initializeFormGroup() {
+    this.searchForm = new FormGroup({
+      searchString: new FormControl(this.searchString),
+    });
+  }
+
+  search() {
+    let searchString = this.searchForm.value.searchString;
+    let dash = "/";
+    if (searchString.length != "") {
+      this.lmsService
+        .getAll(
+          `${environment.appUrl}${environment.readOverdueLoansURI}${environment.likeURI}${dash}${searchString}`
+        )
+        .subscribe(
+          (res) => {
+            this.loans = res;
+            this.totalLoans = this.loans.length;
+            this.searchString = "";
+            this.setPage(1);
+          },
+          (error) => {
+            this.searchString = "";
+          }
+        );
+    } else {
+      this.searchString = "";
+      this.loadAllOverdueLoans();
+    }
   }
 
   loadAllOverdueLoans() {
@@ -76,7 +113,7 @@ export class LoanComponent implements OnInit {
     if (page < 1 || page > this.pager.totalLoans) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.totalLoans, page, 10);
+    this.pager = this.pagerService.getPager(this.totalLoans, page, this.pageSize);
     this.pagedResults = this.loans.slice(
       this.pager.startIndex,
       this.pager.endIndex + 1
