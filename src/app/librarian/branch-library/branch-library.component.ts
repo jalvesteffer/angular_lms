@@ -72,7 +72,6 @@ export class BranchLibraryComponent implements OnInit {
         this.setPage(1);
       },
         (error) => {
-          ;
         }
       );
   }
