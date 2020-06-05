@@ -61,7 +61,7 @@ export class BorrowerAdminComponent implements OnInit {
     this.initializeFormGroup();
   }
 
-  onItemSelect() { }
+  // onItemSelect() { }
 
   initializeFormGroup() {
     this.updateBorrowerForm = new FormGroup({
@@ -83,7 +83,7 @@ export class BorrowerAdminComponent implements OnInit {
   search() {
     let searchString = this.searchForm.value.searchString;
     let dash = "/";
-    if (searchString.length != "") {
+    if (searchString.length != 0) {
       this.lmsService
         .getAll(
           `${environment.appUrl}${environment.readBorrowersURI}${environment.likeURI}${dash}${searchString}`
@@ -196,7 +196,7 @@ export class BorrowerAdminComponent implements OnInit {
 
   setPage(page: number) {
     if (page < 1 || page > this.pager.totalBorrowers) {
-      return;
+      return 1;
     }
     this.pager = this.pagerService.getPager(this.totalBorrowers, page, this.pageSize);
     this.pagedResults = this.borrowers.slice(

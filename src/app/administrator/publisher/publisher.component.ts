@@ -57,7 +57,7 @@ export class PublisherComponent implements OnInit {
     this.initializeFormGroup();
   }
 
-  onItemSelect() { }
+  // onItemSelect() { }
 
   initializeFormGroup() {
     this.updatePublisherForm = new FormGroup({
@@ -79,7 +79,7 @@ export class PublisherComponent implements OnInit {
   search() {
     let searchString = this.searchForm.value.searchString;
     let dash = "/";
-    if (searchString.length != "") {
+    if (searchString.length != 0) {
       this.lmsService
         .getAll(
           `${environment.appUrl}${environment.readPublishersURI}${environment.likeURI}${dash}${searchString}`
@@ -192,7 +192,7 @@ export class PublisherComponent implements OnInit {
 
   setPage(page: number) {
     if (page < 1 || page > this.pager.totalPublishers) {
-      return;
+      return 1;
     }
     this.pager = this.pagerService.getPager(this.totalPublishers, page, this.pageSize);
     this.pagedResults = this.publishers.slice(

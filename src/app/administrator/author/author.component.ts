@@ -57,11 +57,8 @@ export class AuthorComponent implements OnInit {
     this.initializeFormGroup();
   }
 
-  ngAfterViewInit() { }
-
-  onItemSelect() {
-    console.log("select");
-  }
+  // ngAfterViewInit() { }
+  // onItemSelect() { }
 
   initializeFormGroup() {
     this.updateAuthorForm = new FormGroup({
@@ -82,7 +79,7 @@ export class AuthorComponent implements OnInit {
   search() {
     let searchString = this.searchForm.value.searchString;
     let dash = "/";
-    if (searchString.length != "") {
+    if (searchString.length != 0) {
       this.lmsService
         .getAll(
           `${environment.appUrl}${environment.readAuthorsURI}${environment.likeURI}${dash}${searchString}`
@@ -205,7 +202,7 @@ export class AuthorComponent implements OnInit {
 
   setPage(page: number) {
     if (page < 1 || page > this.pager.totalAuthors) {
-      return;
+      return 1;
     }
     this.pager = this.pagerService.getPager(this.totalAuthors, page, this.pageSize);
     this.pagedResults = this.authors.slice(

@@ -57,7 +57,7 @@ export class LoanComponent implements OnInit {
   search() {
     let searchString = this.searchForm.value.searchString;
     let dash = "/";
-    if (searchString.length != "") {
+    if (searchString.length != 0) {
       this.lmsService
         .getAll(
           `${environment.appUrl}${environment.readOverdueLoansURI}${environment.likeURI}${dash}${searchString}`
@@ -87,7 +87,7 @@ export class LoanComponent implements OnInit {
         this.setPage(1);
       },
         (error) => {
-          console.log("Error with loadAllOverdueLoans");
+          this.errMsg = "Error with loadAllOverdueLoans";
         }
       );
   }
@@ -104,14 +104,14 @@ export class LoanComponent implements OnInit {
         this.modalService.dismissAll();
       },
         (error) => {
-          console.log("error with updateObj");
+          this.errMsg = "error with updateObj";
         }
       );
   }
 
   setPage(page: number) {
     if (page < 1 || page > this.pager.totalLoans) {
-      return;
+      return 1;
     }
     this.pager = this.pagerService.getPager(this.totalLoans, page, this.pageSize);
     this.pagedResults = this.loans.slice(

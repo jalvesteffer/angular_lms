@@ -1,19 +1,12 @@
 import { PublisherComponent } from './publisher.component';
-
-import { Component, OnInit, AfterViewInit  } from '@angular/core';
-import { LmsService } from "../../common/services/lms.service";
-import { PagerService } from "../../common/services/pager.service";
-import { environment } from "../../../environments/environment";
+import { LmsService } from '../../common/services/lms.service';
+import { PagerService } from '../../common/services/pager.service';
+import { Observable, from, of, observable, throwError } from "rxjs";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from "@angular/forms";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { FormBuilder, FormGroup, FormControl, Validators, NgModel } from "@angular/forms";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from "@angular/forms";
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 import { HttpClientModule } from "@angular/common/http";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
@@ -22,18 +15,19 @@ import {
   ComponentFixture,
   TestBed,
   tick,
-  fakeAsync,
-} from "@angular/core/testing";
+  fakeAsync
+} from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from "@angular/common/http/testing";
+import { resolve } from 'url';
 
 @Pipe({
   name: 'publisherSort'
 })
 export class MockPublisherSortPipe implements PipeTransform {
-  transform(input: any[]): any {}
+  transform(input: any[]): any { }
 }
 
 //Mock modal reference class
@@ -52,7 +46,7 @@ describe('PublisherComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PublisherComponent, MockPublisherSortPipe ],
+      declarations: [PublisherComponent, MockPublisherSortPipe],
       imports: [
         NgbModule,
         ReactiveFormsModule,
@@ -66,16 +60,171 @@ describe('PublisherComponent', () => {
     pagerService = new PagerService();
     fb = new FormBuilder();
     modalService = TestBed.get(NgbModal);
-    component = new PublisherComponent(service,pagerService, modalService, fb);
+    component = new PublisherComponent(service, pagerService, modalService, fb);
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublisherComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component.searchForm = fb.group({
+      searchString: [""]
+    })
+
+    component.updatePublisherForm = fb.group({
+      publisherId: [""],
+      publisherName: [""],
+      publisherAddress: [""],
+      publisherPhone: [""]
+    });
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it("should load components and call life cycle methods", () => {
+    spyOn(component, "loadAllPublishers");
+    component.ngOnInit();
+
+    expect(component.loadAllPublishers).toHaveBeenCalled;
+  });
+
+  it("should load all publishers via a mock-service - return mock data", () => {
+    const mockPublishers = [
+      {
+        "publisherId": 19,
+        "publisherName": "Anchor Books",
+        "publisherAddress": "New York, USA",
+        "publisherPhone": "365-659-6598"
+      },
+      {
+        "publisherId": 10,
+        "publisherName": "Bantam Books",
+        "publisherAddress": "New York, USA",
+        "publisherPhone": "785-578-8785"
+      }
+    ];
+
+    spyOn(service, "getAll").and.returnValue(of(mockPublishers));
+    component.ngOnInit();
+    expect(service).toBeTruthy();
+    expect(component.publishers).toEqual(mockPublishers);
+    expect(component.publishers.length).toEqual(2)
+  });
+
+  it("should error on null getAll value", () => {
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    component.ngOnInit();
+    expect(service).toBeTruthy();
+    expect(component.publishers).toBeUndefined();
+  });
+
+  it("should ignore setpage out-of-bounds", () => {
+    let retVal = component.setPage(0);
+    expect(retVal).toEqual(1);
+  });
+
+  it("should open a modal window", fakeAsync(() => {
+    const mockPublisher = {
+      "publisherId": 19,
+      "publisherName": "Anchor Books",
+      "publisherAddress": "New York, USA",
+      "publisherPhone": "365-659-6598"
+    };
+
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    component.open("editPublisherModal", mockPublisher);
+    expect(service).toBeTruthy();
+  }));
+
+  it("should open a modal window for create", fakeAsync(() => {
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    component.open("editPublisherModal", null);
+    expect(service).toBeTruthy();
+  }));
+
+  it("should close a modal window", fakeAsync(() => {
+    const mockPublisher = {
+      "publisherId": 19,
+      "publisherName": "Anchor Books",
+      "publisherAddress": "New York, USA",
+      "publisherPhone": "365-659-6598"
+    };
+
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    mockModalRef.result = new Promise((resolve, reject) => reject("error"));
+    component.open("editPublisherModal", mockPublisher);
+    tick();
+    expect(component.closeResult).toBe("Dismissed");
+  }));
+
+  it("should be able to show all results if no search", fakeAsync(() => {
+    const mockPublishers = [
+      {
+        "publisherId": 19,
+        "publisherName": "Anchor Books",
+        "publisherAddress": "New York, USA",
+        "publisherPhone": "365-659-6598"
+      },
+      {
+        "publisherId": 10,
+        "publisherName": "Bantam Books",
+        "publisherAddress": "New York, USA",
+        "publisherPhone": "785-578-8785"
+      }
+    ];
+    spyOn(component, "loadAllPublishers");
+    spyOn(service, "getAll").and.returnValue(of(mockPublishers));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+  }));
+
+  it("should be able to search", fakeAsync(() => {
+    const mockPublishers = [
+      {
+        "publisherId": 19,
+        "publisherName": "Anchor Books",
+        "publisherAddress": "New York, USA",
+        "publisherPhone": "365-659-6598"
+      }
+    ];
+
+    component.searchForm.value.searchString = 'Anchor';
+    spyOn(service, "getAll").and.returnValue(of(mockPublishers));
+    spyOn(component, "setPage");
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(mockPublishers.length).toEqual(1);
+  }));
+
+  it("should return an error on search exception", fakeAsync(() => {
+    component.searchForm.value.searchString = 'king';
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(component.searchString).toEqual("");
+  }));
+
+  it("should be able to update", fakeAsync(() => {
+    const mockPublishers = [
+      {
+        "publisherId": 19,
+        "publisherName": "Anchor Books",
+        "publisherAddress": "New York, USA",
+        "publisherPhone": "999-659-6598"
+      }
+    ];
+
+    component.updatePublisherForm.value.publisherId = 19;
+    component.updatePublisherForm.value.publisherName = "Anchor Books";
+    component.updatePublisherForm.value.publisherAddress = "New York, USA";
+    component.updatePublisherForm.value.publisherPhone = "365-659-6598";
+
+    spyOn(service, "updateObj").and.returnValue(of(mockPublishers));
+    spyOn(component, "loadAllPublishers");
+    component.updatePublisher();
+    expect(component.loadAllPublishers).toHaveBeenCalled();
+  }));
 });
