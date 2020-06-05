@@ -56,7 +56,7 @@ export class BranchComponent implements OnInit {
     this.initializeFormGroup();
   }
 
-  onItemSelect() { }
+  // onItemSelect() { }
 
   initializeFormGroup() {
     this.updateBranchForm = new FormGroup({
@@ -77,7 +77,7 @@ export class BranchComponent implements OnInit {
   search() {
     let searchString = this.searchForm.value.searchString;
     let dash = "/";
-    if (searchString.length != "") {
+    if (searchString.length != 0) {
       this.lmsService
         .getAll(
           `${environment.appUrl}${environment.readBranchesURI}${environment.likeURI}${dash}${searchString}`
@@ -187,7 +187,7 @@ export class BranchComponent implements OnInit {
 
   setPage(page: number) {
     if (page < 1 || page > this.pager.totalBranches) {
-      return;
+      return 1;
     }
     this.pager = this.pagerService.getPager(this.totalBranches, page, this.pageSize);
     this.pagedResults = this.branches.slice(
