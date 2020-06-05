@@ -1,21 +1,20 @@
 // import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { BorrowerComponent } from './borrower.component';
+// import { BorrowerBookListComponent } from './borrower-book-list.component';
 
-
-// describe('BorrowerComponent', () => {
-//   let component: BorrowerComponent;
-//   let fixture: ComponentFixture<BorrowerComponent>;
+// describe('BorrowerBookListComponent', () => {
+//   let component: BorrowerBookListComponent;
+//   let fixture: ComponentFixture<BorrowerBookListComponent>;
 
 //   beforeEach(async(() => {
 //     TestBed.configureTestingModule({
-//       declarations: [ BorrowerComponent ]
+//       declarations: [ BorrowerBookListComponent ]
 //     })
 //     .compileComponents();
 //   }));
 
 //   beforeEach(() => {
-//     fixture = TestBed.createComponent(BorrowerComponent);
+//     fixture = TestBed.createComponent(BorrowerBookListComponent);
 //     component = fixture.componentInstance;
 //     fixture.detectChanges();
 //   });
