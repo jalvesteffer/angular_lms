@@ -65,8 +65,18 @@ describe('BookComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BookComponent);
-    // component = fixture.componentInstance;
-    // fixture.detectChanges();
+    component.searchForm = fb.group({
+      searchString: [""]
+    })
+
+    component.updateBookForm = fb.group({
+      bookId: [""],
+      title: [""],
+      pubId: [""],
+      authors: [""],
+      publisher: [""],
+      genres: [""]
+    });
   });
 
   it('should create', () => {
@@ -279,5 +289,132 @@ describe('BookComponent', () => {
     component.open("editBookModal", mockBook);
     tick();
     expect(component.closeResult).toBe("Dismissed");
+  }));
+
+  it("should be able to show all results if no search", fakeAsync(() => {
+    const mockBooks = [
+      {
+        "bookId": 101,
+        "title": "1984",
+        "pubId": 2,
+        "publisher": [
+          {
+            "publisherId": 2,
+            "publisherName": "Penguin Random House"
+          }
+        ],
+        "authors": [
+          {
+            "authorId": 70,
+            "authorName": "George Orwell"
+          }
+        ],
+        "genres": [
+          {
+            "genre_id": 3,
+            "genre_name": "Literature"
+          }
+        ]
+      },
+      {
+        "bookId": 99,
+        "title": "A Brief History of Time",
+        "pubId": 2,
+        "publisher": [
+          {
+            "publisherId": 2,
+            "publisherName": "Penguin Random House"
+          }
+        ],
+        "authors": [
+          {
+            "authorId": 64,
+            "authorName": "Stephen Hawking"
+          }
+        ],
+        "genres": [
+          {
+            "genre_id": 28,
+            "genre_name": "Science & Math"
+          },
+          {
+            "genre_id": 33,
+            "genre_name": "Non-Fiction"
+          }
+        ]
+      }
+    ];
+    spyOn(component, "loadAllBooks");
+    spyOn(service, "getAll").and.returnValue(of(mockBooks));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+  }));
+
+  it("should be able to search", fakeAsync(() => {
+    const mockBooks = [
+      {
+        "bookId": 101,
+        "title": "1984",
+        "pubId": 2,
+        "publisher": [
+          {
+            "publisherId": 2,
+            "publisherName": "Penguin Random House"
+          }
+        ],
+        "authors": [
+          {
+            "authorId": 70,
+            "authorName": "George Orwell"
+          }
+        ],
+        "genres": [
+          {
+            "genre_id": 3,
+            "genre_name": "Literature"
+          }
+        ]
+      }
+    ];
+
+    component.searchForm.value.searchString = '1984';
+    spyOn(service, "getAll").and.returnValue(of(mockBooks));
+    spyOn(component, "setPage");
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(mockBooks.length).toEqual(1);
+  }));
+
+  it("should return an error on search exception", fakeAsync(() => {
+    component.searchForm.value.searchString = 'king';
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(component.searchString).toEqual("");
+  }));
+
+  it("should be able to update", fakeAsync(() => {
+    const mockBooks = [
+      {
+        "bookId": 101,
+        "title": "1985",
+        "pubId": 2
+      }
+    ];
+
+    component.updateBookForm.value.bookId = 101;
+    component.updateBookForm.value.title = "Stephen King";
+    component.updateBookForm.value.pubId = 2;
+    component.updateBookForm.value.authors = null;
+    component.updateBookForm.value.publisher = null;
+    component.updateBookForm.value.genres = null;
+
+    spyOn(service, "updateObj").and.returnValue(of(mockBooks));
+    spyOn(component, "loadAllBooks");
+    component.updateBook();
+    expect(component.loadAllBooks).toHaveBeenCalled();
   }));
 });

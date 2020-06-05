@@ -78,7 +78,7 @@ export class GenreComponent implements OnInit {
   search() {
     let searchString = this.searchForm.value.searchString;
     let dash = "/";
-    if (searchString.length != "") {
+    if (searchString.length != 0) {
       this.lmsService
         .getAll(
           `${environment.appUrl}${environment.readGenresURI}${environment.likeURI}${dash}${searchString}`

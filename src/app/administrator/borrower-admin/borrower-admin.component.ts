@@ -83,7 +83,7 @@ export class BorrowerAdminComponent implements OnInit {
   search() {
     let searchString = this.searchForm.value.searchString;
     let dash = "/";
-    if (searchString.length != "") {
+    if (searchString.length != 0) {
       this.lmsService
         .getAll(
           `${environment.appUrl}${environment.readBorrowersURI}${environment.likeURI}${dash}${searchString}`

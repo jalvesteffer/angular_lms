@@ -65,8 +65,15 @@ describe('BranchComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BranchComponent);
-    // component = fixture.componentInstance;
-    // fixture.detectChanges();
+    component.searchForm = fb.group({
+      searchString: [""]
+    })
+
+    component.updateBranchForm = fb.group({
+      branchId: [""],
+      branchName: [""],
+      branchAddress: [""]
+    });
   });
 
   it('should create', () => {
@@ -143,5 +150,90 @@ describe('BranchComponent', () => {
     component.open("editBranchModal", mockBranch);
     tick();
     expect(component.closeResult).toBe("Dismissed");
+  }));
+
+  it("should be able to show all results if no search", fakeAsync(() => {
+    const mockBranches = [
+      {
+        "branchId": 3,
+        "branchName": "Arlington Public Library",
+        "branchAddress": "Arlington, VA"
+      },
+      {
+        "branchId": 10,
+        "branchName": "Ashburn Library",
+        "branchAddress": "Ashburn, VA"
+      }
+    ];
+    spyOn(component, "loadAllBranches");
+    spyOn(service, "getAll").and.returnValue(of(mockBranches));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+  }));
+
+  it("should be able to search", fakeAsync(() => {
+    const mockBranches = [
+      {
+        "branchId": 10,
+        "branchName": "Ashburn Library",
+        "branchAddress": "Ashburn, VA"
+      }
+    ];
+
+    component.searchForm.value.searchString = 'Ashburn';
+    spyOn(service, "getAll").and.returnValue(of(mockBranches));
+    spyOn(component, "setPage");
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(mockBranches.length).toEqual(1);
+  }));
+
+  it("should return an error on search exception", fakeAsync(() => {
+    component.searchForm.value.searchString = 'king';
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(component.searchString).toEqual("");
+  }));
+
+  it("should be able to update", fakeAsync(() => {
+    const mockBranches = [
+      {
+        "branchId": 10,
+        "branchName": "Downtown Library",
+        "branchAddress": "Ashburn, VA"
+      }
+    ];
+
+    component.updateBranchForm.value.branchId = 10;
+    component.updateBranchForm.value.branchName = "Ashburn Library";
+    component.updateBranchForm.value.branchAddress = "Ashburn, VA";
+
+    spyOn(service, "updateObj").and.returnValue(of(mockBranches));
+    spyOn(component, "loadAllBranches");
+    component.updateBranch();
+    expect(component.loadAllBranches).toHaveBeenCalled();
+  }));
+
+  it("should be able to create", fakeAsync(() => {
+    const mockBorrowers = [
+      {
+        "branchId": 2,
+        "branchName": "Downtown Library",
+        "branchAddress": "Ashburn, VA"
+      }
+    ];
+
+    component.updateBranchForm.value.cardNo = null;
+    component.updateBranchForm.value.name = "Downtown Library";
+    component.updateBranchForm.value.address = "Ashburn, VA, VA";
+
+    spyOn(service, "postObj").and.returnValue(of(mockBorrowers));
+    spyOn(component, "loadAllBranches");
+    component.updateBranch();
+    expect(component.loadAllBranches).toHaveBeenCalled();
   }));
 });

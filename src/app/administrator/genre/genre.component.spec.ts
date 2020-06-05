@@ -65,8 +65,15 @@ describe('GenreComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GenreComponent);
-    // component = fixture.componentInstance;
-    // fixture.detectChanges();
+    component.searchForm = fb.group({
+      searchString: [""]
+    })
+
+    component.updateGenreForm = fb.group({
+      genre_id: [""],
+      genre_name: [""],
+      books: [""]
+    });
   });
 
   it('should create', () => {
@@ -312,5 +319,67 @@ describe('GenreComponent', () => {
     component.open("editAuthorModal", mockGenre);
     tick();
     expect(component.closeResult).toBe("Dismissed");
+  }));
+
+  it("should be able to show all results if no search", fakeAsync(() => {
+    const mockGenres = [
+      {
+        "genre_id": 38,
+        "genre_name": "Biographies & Memoirs"
+      },
+      {
+        "genre_id": 35,
+        "genre_name": "Business"
+      }
+    ];
+    spyOn(component, "loadAllGenres");
+    spyOn(service, "getAll").and.returnValue(of(mockGenres));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+  }));
+
+  it("should be able to search", fakeAsync(() => {
+    const mockGenres = [
+      {
+        "genre_id": 35,
+        "genre_name": "Business"
+      }
+    ];
+
+    component.searchForm.value.searchString = 'Business';
+    spyOn(service, "getAll").and.returnValue(of(mockGenres));
+    spyOn(component, "setPage");
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(mockGenres.length).toEqual(1);
+  }));
+
+  it("should return an error on search exception", fakeAsync(() => {
+    component.searchForm.value.searchString = 'king';
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(component.searchString).toEqual("");
+  }));
+
+  it("should be able to update", fakeAsync(() => {
+    const mockGenres = [
+      {
+        "genre_id": 35,
+        "genre_name": "Economics"
+      }
+    ];
+
+    component.updateGenreForm.value.genre_id = 35;
+    component.updateGenreForm.value.genre_name = "Business Books";
+    component.updateGenreForm.value.books = null;
+
+    spyOn(service, "updateObj").and.returnValue(of(mockGenres));
+    spyOn(component, "loadAllGenres");
+    component.updateGenre();
+    expect(component.loadAllGenres).toHaveBeenCalled();
   }));
 });

@@ -65,8 +65,16 @@ describe('PublisherComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublisherComponent);
-    // component = fixture.componentInstance;
-    // fixture.detectChanges();
+    component.searchForm = fb.group({
+      searchString: [""]
+    })
+
+    component.updatePublisherForm = fb.group({
+      publisherId: [""],
+      publisherName: [""],
+      publisherAddress: [""],
+      publisherPhone: [""]
+    });
   });
 
   it('should create', () => {
@@ -147,5 +155,76 @@ describe('PublisherComponent', () => {
     component.open("editPublisherModal", mockPublisher);
     tick();
     expect(component.closeResult).toBe("Dismissed");
+  }));
+
+  it("should be able to show all results if no search", fakeAsync(() => {
+    const mockPublishers = [
+      {
+        "publisherId": 19,
+        "publisherName": "Anchor Books",
+        "publisherAddress": "New York, USA",
+        "publisherPhone": "365-659-6598"
+      },
+      {
+        "publisherId": 10,
+        "publisherName": "Bantam Books",
+        "publisherAddress": "New York, USA",
+        "publisherPhone": "785-578-8785"
+      }
+    ];
+    spyOn(component, "loadAllPublishers");
+    spyOn(service, "getAll").and.returnValue(of(mockPublishers));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+  }));
+
+  it("should be able to search", fakeAsync(() => {
+    const mockPublishers = [
+      {
+        "publisherId": 19,
+        "publisherName": "Anchor Books",
+        "publisherAddress": "New York, USA",
+        "publisherPhone": "365-659-6598"
+      }
+    ];
+
+    component.searchForm.value.searchString = 'Anchor';
+    spyOn(service, "getAll").and.returnValue(of(mockPublishers));
+    spyOn(component, "setPage");
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(mockPublishers.length).toEqual(1);
+  }));
+
+  it("should return an error on search exception", fakeAsync(() => {
+    component.searchForm.value.searchString = 'king';
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(component.searchString).toEqual("");
+  }));
+
+  it("should be able to update", fakeAsync(() => {
+    const mockPublishers = [
+      {
+        "publisherId": 19,
+        "publisherName": "Anchor Books",
+        "publisherAddress": "New York, USA",
+        "publisherPhone": "999-659-6598"
+      }
+    ];
+
+    component.updatePublisherForm.value.publisherId = 19;
+    component.updatePublisherForm.value.publisherName = "Anchor Books";
+    component.updatePublisherForm.value.publisherAddress = "New York, USA";
+    component.updatePublisherForm.value.publisherPhone = "365-659-6598";
+
+    spyOn(service, "updateObj").and.returnValue(of(mockPublishers));
+    spyOn(component, "loadAllPublishers");
+    component.updatePublisher();
+    expect(component.loadAllPublishers).toHaveBeenCalled();
   }));
 });

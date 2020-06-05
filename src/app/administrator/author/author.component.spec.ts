@@ -69,8 +69,15 @@ describe('AuthorComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AuthorComponent);
-    // component = fixture.componentInstance;
-    // fixture.detectChanges();
+    component.searchForm = fb.group({
+      searchString: [""]
+    });
+
+    component.updateAuthorForm = fb.group({
+      authorId: [""],
+      authorName: [""],
+      books: [""]
+    });
   });
 
   it('should create', () => {
@@ -470,6 +477,88 @@ describe('AuthorComponent', () => {
     component.open("editAuthorModal", mockAuthor);
     tick();
     expect(component.closeResult).toBe("Dismissed");
+  }));
+
+  it("should be able to show all results if no search", fakeAsync(() => {
+    const mockAuthors = [
+      {
+        "authorId": 1,
+        "authorName": "Stephen King",
+        "books": [
+          {
+            "bookId": 2,
+            "title": "The Shining"
+          },
+          {
+            "bookId": 98,
+            "title": "Sleeping Beauties"
+          },
+          {
+            "bookId": 100,
+            "title": "The Stand"
+          }
+        ]
+      },
+      {
+        "authorId": 82,
+        "authorName": "Tom Stern"
+      }
+    ];
+    spyOn(component, "loadAllAuthors");
+    spyOn(service, "getAll").and.returnValue(of(mockAuthors));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+  }));
+
+  it("should be able to search", fakeAsync(() => {
+    const mockAuthors = [
+      {
+        "authorId": 1,
+        "authorName": "Stephen King",
+        "books": [
+          {
+            "bookId": 2,
+            "title": "The Shining"
+          }
+        ]
+      }
+    ];
+
+    component.searchForm.value.searchString = 'king';
+    spyOn(service, "getAll").and.returnValue(of(mockAuthors));
+    spyOn(component, "setPage");
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(mockAuthors.length).toEqual(1);
+  }));
+
+  it("should return an error on search exception", fakeAsync(() => {
+    component.searchForm.value.searchString = 'king';
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(component.searchString).toEqual("");
+  }));
+
+  it("should be able to update", fakeAsync(() => {
+    const mockAuthors = [
+      {
+        "authorId": 1,
+        "authorName": "Stephen Kingdom"
+      }
+    ];
+
+    component.updateAuthorForm.value.authorId = 1;
+    component.updateAuthorForm.value.authorName = "Stephen King";
+    component.updateAuthorForm.value.books = null;
+
+    spyOn(service, "updateObj").and.returnValue(of(mockAuthors));
+    spyOn(component, "loadAllAuthors");
+    component.updateAuthor();
+    expect(component.loadAllAuthors).toHaveBeenCalled();
   }));
 
 });

@@ -79,7 +79,7 @@ export class AuthorComponent implements OnInit {
   search() {
     let searchString = this.searchForm.value.searchString;
     let dash = "/";
-    if (searchString.length != "") {
+    if (searchString.length != 0) {
       this.lmsService
         .getAll(
           `${environment.appUrl}${environment.readAuthorsURI}${environment.likeURI}${dash}${searchString}`

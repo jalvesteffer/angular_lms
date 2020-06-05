@@ -58,8 +58,9 @@ describe('LoanComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoanComponent);
-    // component = fixture.componentInstance;
-    // fixture.detectChanges();
+    component.searchForm = fb.group({
+      searchString: [""]
+    })
   });
 
   it('should create', () => {
@@ -150,11 +151,186 @@ describe('LoanComponent', () => {
     spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
     component.ngOnInit();
     expect(service).toBeTruthy();
-    expect(component.loans).toBeUndefined();
+    expect(component.errMsg).toBe("Error with loadAllOverdueLoans");
   });
 
   it("should ignore setpage out-of-bounds", () => {
     let retVal = component.setPage(0);
     expect(retVal).toEqual(1);
   });
+
+  it("should be able to show all results if no search", fakeAsync(() => {
+    const mockLoans = [
+      {
+        "loanId": 2,
+        "bookId": 2,
+        "branchId": 2,
+        "cardNo": 2,
+        "dateOut": "2020-05-17T04:28:29.000Z",
+        "dueDate": "2020-05-24T04:28:29.000Z",
+        "dateIn": null,
+        "book": [
+          {
+            "bookId": 2,
+            "title": "The Shining",
+            "pubId": 1
+          }
+        ],
+        "branch": [
+          {
+            "branchId": 2,
+            "branchName": "Pohick Regional Library",
+            "branchAddress": "Burke, VA"
+          }
+        ],
+        "borrower": [
+          {
+            "cardNo": 2,
+            "name": "John Davis",
+            "address": "Fairfax, VA",
+            "phone": "545-555-5555"
+          }
+        ]
+      },
+      {
+        "loanId": 3,
+        "bookId": 99,
+        "branchId": 9,
+        "cardNo": 5,
+        "dateOut": "2020-05-22T04:28:29.000Z",
+        "dueDate": "2020-05-29T04:28:29.000Z",
+        "dateIn": null,
+        "book": [
+          {
+            "bookId": 99,
+            "title": "A Brief History of Time",
+            "pubId": 2
+          }
+        ],
+        "branch": [
+          {
+            "branchId": 9,
+            "branchName": "City of Fairfax Regional Library",
+            "branchAddress": "Fairfax, VA"
+          }
+        ],
+        "borrower": [
+          {
+            "cardNo": 5,
+            "name": "Bob Evans",
+            "address": "Charlottesville, VA",
+            "phone": "703-727-5223"
+          }
+        ]
+      }
+    ];
+    spyOn(component, "loadAllOverdueLoans");
+    spyOn(service, "getAll").and.returnValue(of(mockLoans));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+  }));
+
+  it("should be able to search", fakeAsync(() => {
+    const mockLoans = [
+      {
+        "loanId": 3,
+        "bookId": 99,
+        "branchId": 9,
+        "cardNo": 5,
+        "dateOut": "2020-05-22T04:28:29.000Z",
+        "dueDate": "2020-05-29T04:28:29.000Z",
+        "dateIn": null,
+        "book": [
+          {
+            "bookId": 99,
+            "title": "A Brief History of Time",
+            "pubId": 2
+          }
+        ],
+        "branch": [
+          {
+            "branchId": 9,
+            "branchName": "City of Fairfax Regional Library",
+            "branchAddress": "Fairfax, VA"
+          }
+        ],
+        "borrower": [
+          {
+            "cardNo": 5,
+            "name": "Bob Evans",
+            "address": "Charlottesville, VA",
+            "phone": "703-727-5223"
+          }
+        ]
+      }
+    ];
+
+    component.searchForm.value.searchString = '5';
+    spyOn(service, "getAll").and.returnValue(of(mockLoans));
+    spyOn(component, "setPage");
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(mockLoans.length).toEqual(1);
+  }));
+
+  it("should return an error on search exception", fakeAsync(() => {
+    component.searchForm.value.searchString = '99';
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(component.searchString).toEqual("");
+  }));
+
+  it("should extend loans due date", fakeAsync(() => {
+    const mockLoans = [
+      {
+        "loanId": 3,
+        "bookId": 99,
+        "branchId": 9,
+        "cardNo": 5,
+        "dateOut": "2020-05-22T04:28:29.000Z",
+        "dueDate": "2020-05-29T04:28:29.000Z",
+        "dateIn": null,
+        "book": [
+          {
+            "bookId": 99,
+            "title": "A Brief History of Time",
+            "pubId": 2
+          }
+        ],
+        "branch": [
+          {
+            "branchId": 9,
+            "branchName": "City of Fairfax Regional Library",
+            "branchAddress": "Fairfax, VA"
+          }
+        ],
+        "borrower": [
+          {
+            "cardNo": 5,
+            "name": "Bob Evans",
+            "address": "Charlottesville, VA",
+            "phone": "703-727-5223"
+          }
+        ]
+      }
+    ];
+    spyOn(service, "updateObj").and.returnValue(of(mockLoans));
+    spyOn(component, "loadAllOverdueLoans");
+    expect(service).toBeTruthy();
+    component.extendLoan(3);
+    tick();
+    expect(component.loadAllOverdueLoans).toHaveBeenCalled();
+  }));
+
+  it("should error", fakeAsync(() => {
+    spyOn(service, "updateObj").and.returnValue(throwError({ status: 404 }));
+    expect(service).toBeTruthy();
+    component.extendLoan(3);
+    tick();
+    expect(component.errMsg).toBe("error with updateObj");
+  }));
 });

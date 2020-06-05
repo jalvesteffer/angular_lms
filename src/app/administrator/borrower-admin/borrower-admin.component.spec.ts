@@ -65,8 +65,16 @@ describe('BorrowerAdminComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BorrowerAdminComponent);
-    // component = fixture.componentInstance;
-    // fixture.detectChanges();
+    component.searchForm = fb.group({
+      searchString: [""]
+    })
+
+    component.updateBorrowerForm = fb.group({
+      cardNo: [""],
+      name: [""],
+      address: [""],
+      phone: [""]
+    });
   });
 
   it('should create', () => {
@@ -147,5 +155,97 @@ describe('BorrowerAdminComponent', () => {
     component.open("editBorrowerModal", mockBorrower);
     tick();
     expect(component.closeResult).toBe("Dismissed");
+  }));
+
+  it("should be able to show all results if no search", fakeAsync(() => {
+    const mockBorrowers = [
+      {
+        "cardNo": 7,
+        "name": "Bill Brown",
+        "address": "Williamsburg, VA",
+        "phone": "757-458-8788"
+      },
+      {
+        "cardNo": 5,
+        "name": "Bob Evans",
+        "address": "Charlottesville, VA",
+        "phone": "703-727-5223"
+      }
+    ];
+    spyOn(component, "loadAllBorrowers");
+    spyOn(service, "getAll").and.returnValue(of(mockBorrowers));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+  }));
+
+  it("should be able to search", fakeAsync(() => {
+    const mockBorrowers = [
+      {
+        "cardNo": 5,
+        "name": "Bob Evans",
+        "address": "Charlottesville, VA",
+        "phone": "703-727-5223"
+      }
+    ];
+
+    component.searchForm.value.searchString = 'Evans';
+    spyOn(service, "getAll").and.returnValue(of(mockBorrowers));
+    spyOn(component, "setPage");
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(mockBorrowers.length).toEqual(1);
+  }));
+
+  it("should return an error on search exception", fakeAsync(() => {
+    component.searchForm.value.searchString = 'king';
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    expect(service).toBeTruthy();
+    component.search();
+    tick();
+    expect(component.searchString).toEqual("");
+  }));
+
+  it("should be able to update", fakeAsync(() => {
+    const mockBorrowers = [
+      {
+        "cardNo": 5,
+        "name": "Bob Evans",
+        "address": "Fairfax, VA",
+        "phone": "703-727-5223"
+      }
+    ];
+
+    component.updateBorrowerForm.value.cardNo = 5;
+    component.updateBorrowerForm.value.name = "Bob Evans";
+    component.updateBorrowerForm.value.address = "Charlottesville, VA";
+    component.updateBorrowerForm.value.phone = "703-727-5223";
+
+    spyOn(service, "updateObj").and.returnValue(of(mockBorrowers));
+    spyOn(component, "loadAllBorrowers");
+    component.updateBorrower();
+    expect(component.loadAllBorrowers).toHaveBeenCalled();
+  }));
+
+  it("should be able to create", fakeAsync(() => {
+    const mockBorrowers = [
+      {
+        "cardNo": 2,
+        "name": "Bob Evans",
+        "address": "Fairfax, VA",
+        "phone": "703-727-5223"
+      }
+    ];
+
+    component.updateBorrowerForm.value.cardNo = null;
+    component.updateBorrowerForm.value.name = "Bob Evans";
+    component.updateBorrowerForm.value.address = "Charlottesville, VA";
+    component.updateBorrowerForm.value.phone = "703-727-5223";
+
+    spyOn(service, "postObj").and.returnValue(of(mockBorrowers));
+    spyOn(component, "loadAllBorrowers");
+    component.updateBorrower();
+    expect(component.loadAllBorrowers).toHaveBeenCalled();
   }));
 });
