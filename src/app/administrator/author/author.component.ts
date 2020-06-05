@@ -57,11 +57,8 @@ export class AuthorComponent implements OnInit {
     this.initializeFormGroup();
   }
 
-  ngAfterViewInit() { }
-
-  onItemSelect() {
-    console.log("select");
-  }
+  // ngAfterViewInit() { }
+  // onItemSelect() { }
 
   initializeFormGroup() {
     this.updateAuthorForm = new FormGroup({
@@ -112,7 +109,7 @@ export class AuthorComponent implements OnInit {
         this.setPage(1);
       },
         (error) => {
-          ;
+          console.log("error loading all authors");
         }
       );
   }
