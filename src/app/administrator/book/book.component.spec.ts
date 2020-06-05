@@ -1,18 +1,12 @@
 import { BookComponent } from './book.component';
-import { Component, OnInit, AfterViewInit  } from '@angular/core';
-import { LmsService } from "../../common/services/lms.service";
-import { PagerService } from "../../common/services/pager.service";
-import { environment } from "../../../environments/environment";
+import { LmsService } from '../../common/services/lms.service';
+import { PagerService } from '../../common/services/pager.service';
+import { Observable, from, of, observable, throwError } from "rxjs";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from "@angular/forms";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { FormBuilder, FormGroup, FormControl, Validators, NgModel } from "@angular/forms";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from "@angular/forms";
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 import { HttpClientModule } from "@angular/common/http";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
@@ -21,18 +15,19 @@ import {
   ComponentFixture,
   TestBed,
   tick,
-  fakeAsync,
-} from "@angular/core/testing";
+  fakeAsync
+} from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from "@angular/common/http/testing";
+import { resolve } from 'url';
 
 @Pipe({
   name: 'titleSort'
 })
 export class MockBookCopiesSortPipe implements PipeTransform {
-  transform(input: any[]): any {}
+  transform(input: any[]): any { }
 }
 
 //Mock modal reference class
@@ -51,7 +46,7 @@ describe('BookComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BookComponent, MockBookCopiesSortPipe ],
+      declarations: [BookComponent, MockBookCopiesSortPipe],
       imports: [
         NgbModule,
         ReactiveFormsModule,
@@ -65,16 +60,224 @@ describe('BookComponent', () => {
     pagerService = new PagerService();
     fb = new FormBuilder();
     modalService = TestBed.get(NgbModal);
-    component = new BookComponent(service,pagerService, modalService, fb);
+    component = new BookComponent(service, pagerService, modalService, fb);
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BookComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    // component = fixture.componentInstance;
+    // fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it("should load components and call life cycle methods", () => {
+    spyOn(component, "loadAllBooks");
+    component.ngOnInit();
+
+    expect(component.loadAllBooks).toHaveBeenCalled;
+  });
+
+  it("should load all books via a mock-service - return mock data", () => {
+    const mockBooks = [
+      {
+        "bookId": 101,
+        "title": "1984",
+        "pubId": 2,
+        "publisher": [
+          {
+            "publisherId": 2,
+            "publisherName": "Penguin Random House"
+          }
+        ],
+        "authors": [
+          {
+            "authorId": 70,
+            "authorName": "George Orwell"
+          }
+        ],
+        "genres": [
+          {
+            "genre_id": 3,
+            "genre_name": "Literature"
+          }
+        ]
+      },
+      {
+        "bookId": 99,
+        "title": "A Brief History of Time",
+        "pubId": 2,
+        "publisher": [
+          {
+            "publisherId": 2,
+            "publisherName": "Penguin Random House"
+          }
+        ],
+        "authors": [
+          {
+            "authorId": 64,
+            "authorName": "Stephen Hawking"
+          }
+        ],
+        "genres": [
+          {
+            "genre_id": 28,
+            "genre_name": "Science & Math"
+          },
+          {
+            "genre_id": 33,
+            "genre_name": "Non-Fiction"
+          }
+        ]
+      }
+    ];
+
+    spyOn(service, "getAll").and.returnValue(of(mockBooks));
+    component.ngOnInit();
+    expect(service).toBeTruthy();
+    expect(component.books).toEqual(mockBooks);
+    expect(component.books.length).toEqual(2)
+  });
+
+  it("should error on null getAll value", () => {
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    component.ngOnInit();
+    expect(service).toBeTruthy();
+    expect(component.books).toBeUndefined();
+  });
+
+  it("should error on null getAll authors value", () => {
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    component.loadAllAuthors();
+    expect(service).toBeTruthy();
+    expect(component.authors).toBeUndefined();
+  });
+
+  it("should error on null getAll publishers value", () => {
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    component.loadAllPublishers();
+    expect(service).toBeTruthy();
+    expect(component.publisher).toBeUndefined();
+  });
+
+  it("should error on null getAll genres value", () => {
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    component.loadAllGenres();
+    expect(service).toBeTruthy();
+    expect(component.genres).toBeUndefined();
+  });
+
+  it("should ignore setpage out-of-bounds", () => {
+    let retVal = component.setPage(0);
+    expect(retVal).toEqual(1);
+  });
+
+  it("should open a modal window", fakeAsync(() => {
+    const mockAuthors = [
+      {
+        "authorId": 68,
+        "authorName": "Alice Schroeder"
+      },
+      {
+        "authorId": 26,
+        "authorName": "Brandon Sanderson"
+      }
+    ];
+
+    const mockBook = {
+      "bookId": 101,
+      "title": "1984",
+      "pubId": 2,
+      "publisher": [
+        {
+          "publisherId": 2,
+          "publisherName": "Penguin Random House"
+        }
+      ],
+      "authors": [
+        {
+          "authorId": 70,
+          "authorName": "George Orwell"
+        }
+      ],
+      "genres": [
+        {
+          "genre_id": 3,
+          "genre_name": "Literature"
+        }
+      ]
+    }
+
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    spyOn(service, "getAll").and.returnValue(of(mockAuthors));
+    component.open("editBookModal", mockBook);
+    expect(service).toBeTruthy();
+    expect(component.totalAuthors).toEqual(mockAuthors);
+    expect(component.totalAuthors.length).toEqual(2)
+  }));
+
+  it("should open a modal window for create", fakeAsync(() => {
+    const mockAuthors = [
+      {
+        "authorId": 68,
+        "authorName": "Alice Schroeder"
+      },
+      {
+        "authorId": 26,
+        "authorName": "Brandon Sanderson"
+      }
+    ];
+
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    spyOn(service, "getAll").and.returnValue(of(mockAuthors));
+    component.open("editBookModal", null);
+    expect(service).toBeTruthy();
+  }));
+
+  it("should close a modal window", fakeAsync(() => {
+    const mockBook =
+    {
+      "bookId": 101,
+      "title": "1984",
+      "pubId": 2,
+      "publisher": [
+        {
+          "publisherId": 2,
+          "publisherName": "Penguin Random House"
+        }
+      ],
+      "authors": [
+        {
+          "authorId": 70,
+          "authorName": "George Orwell"
+        }
+      ],
+      "genres": [
+        {
+          "genre_id": 3,
+          "genre_name": "Literature"
+        }
+      ]
+    };
+
+    const mockAuthors = [
+      {
+        "authorId": 68,
+        "authorName": "Alice Schroeder"
+      },
+      {
+        "authorId": 26,
+        "authorName": "Brandon Sanderson"
+      }
+    ];
+
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    spyOn(service, "getAll").and.returnValue(of(mockAuthors));
+    mockModalRef.result = new Promise((resolve, reject) => reject("error"));
+    component.open("editBookModal", mockBook);
+    tick();
+    expect(component.closeResult).toBe("Dismissed");
+  }));
 });

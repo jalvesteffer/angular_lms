@@ -1,18 +1,12 @@
 import { BranchComponent } from './branch.component';
-import { Component, OnInit, AfterViewInit  } from '@angular/core';
-import { LmsService } from "../../common/services/lms.service";
-import { PagerService } from "../../common/services/pager.service";
-import { environment } from "../../../environments/environment";
+import { LmsService } from '../../common/services/lms.service';
+import { PagerService } from '../../common/services/pager.service';
+import { Observable, from, of, observable, throwError } from "rxjs";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from "@angular/forms";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { FormBuilder, FormGroup, FormControl, Validators, NgModel } from "@angular/forms";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from "@angular/forms";
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 import { HttpClientModule } from "@angular/common/http";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
@@ -21,18 +15,19 @@ import {
   ComponentFixture,
   TestBed,
   tick,
-  fakeAsync,
-} from "@angular/core/testing";
+  fakeAsync
+} from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from "@angular/common/http/testing";
+import { resolve } from 'url';
 
 @Pipe({
   name: 'branchSort'
 })
 export class MockBranchsortPipe implements PipeTransform {
-  transform(input: any[]): any {}
+  transform(input: any[]): any { }
 }
 
 //Mock modal reference class
@@ -51,7 +46,7 @@ describe('BranchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BranchComponent, MockBranchsortPipe ],
+      declarations: [BranchComponent, MockBranchsortPipe],
       imports: [
         NgbModule,
         ReactiveFormsModule,
@@ -65,16 +60,88 @@ describe('BranchComponent', () => {
     pagerService = new PagerService();
     fb = new FormBuilder();
     modalService = TestBed.get(NgbModal);
-    component = new BranchComponent(service,pagerService, modalService, fb);
+    component = new BranchComponent(service, pagerService, modalService, fb);
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BranchComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    // component = fixture.componentInstance;
+    // fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it("should load components and call life cycle methods", () => {
+    spyOn(component, "loadAllBranches");
+    component.ngOnInit();
+
+    expect(component.loadAllBranches).toHaveBeenCalled;
+  });
+
+  it("should load all branches via a mock-service - return mock data", () => {
+    const mockBranches = [
+      {
+        "branchId": 3,
+        "branchName": "Arlington Public Library",
+        "branchAddress": "Arlington, VA"
+      },
+      {
+        "branchId": 10,
+        "branchName": "Ashburn Library",
+        "branchAddress": "Ashburn, VA"
+      }
+    ];
+
+    spyOn(service, "getAll").and.returnValue(of(mockBranches));
+    component.ngOnInit();
+    expect(service).toBeTruthy();
+    expect(component.branches).toEqual(mockBranches);
+    expect(component.branches.length).toEqual(2)
+  });
+
+  it("should error on null getAll value", () => {
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    component.ngOnInit();
+    expect(service).toBeTruthy();
+    expect(component.branches).toBeUndefined();
+  });
+
+  it("should ignore setpage out-of-bounds", () => {
+    let retVal = component.setPage(0);
+    expect(retVal).toEqual(1);
+  });
+
+  it("should open a modal window", fakeAsync(() => {
+    const mockBranch = {
+      "branchId": 3,
+      "branchName": "Arlington Public Library",
+      "branchAddress": "Arlington, VA"
+    };
+
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    component.open("editBranchModal", mockBranch);
+    expect(service).toBeTruthy();
+  }));
+
+  it("should open a modal window for create", fakeAsync(() => {
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    component.open("editBranchModal", null);
+    expect(service).toBeTruthy();
+  }));
+
+  it("should close a modal window", fakeAsync(() => {
+    const mockBranch = {
+      "branchId": 3,
+      "branchName": "Arlington Public Library",
+      "branchAddress": "Arlington, VA"
+    };
+
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    mockModalRef.result = new Promise((resolve, reject) => reject("error"));
+    component.open("editBranchModal", mockBranch);
+    tick();
+    expect(component.closeResult).toBe("Dismissed");
+  }));
 });

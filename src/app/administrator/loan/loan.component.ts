@@ -111,7 +111,7 @@ export class LoanComponent implements OnInit {
 
   setPage(page: number) {
     if (page < 1 || page > this.pager.totalLoans) {
-      return;
+      return 1;
     }
     this.pager = this.pagerService.getPager(this.totalLoans, page, this.pageSize);
     this.pagedResults = this.loans.slice(

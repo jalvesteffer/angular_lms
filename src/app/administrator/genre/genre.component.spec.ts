@@ -1,18 +1,12 @@
 import { GenreComponent } from './genre.component';
-import { Component, OnInit, AfterViewInit  } from '@angular/core';
-import { LmsService } from "../../common/services/lms.service";
-import { PagerService } from "../../common/services/pager.service";
-import { environment } from "../../../environments/environment";
+import { LmsService } from '../../common/services/lms.service';
+import { PagerService } from '../../common/services/pager.service';
+import { Observable, from, of, observable, throwError } from "rxjs";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from "@angular/forms";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { FormBuilder, FormGroup, FormControl, Validators, NgModel } from "@angular/forms";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from "@angular/forms";
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 import { HttpClientModule } from "@angular/common/http";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
@@ -21,18 +15,19 @@ import {
   ComponentFixture,
   TestBed,
   tick,
-  fakeAsync,
-} from "@angular/core/testing";
+  fakeAsync
+} from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from "@angular/common/http/testing";
+import { resolve } from 'url';
 
 @Pipe({
   name: 'genreSort'
 })
 export class MockGenreSortPipe implements PipeTransform {
-  transform(input: any[]): any {}
+  transform(input: any[]): any { }
 }
 
 //Mock modal reference class
@@ -51,7 +46,7 @@ describe('GenreComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GenreComponent, MockGenreSortPipe  ],
+      declarations: [GenreComponent, MockGenreSortPipe],
       imports: [
         NgbModule,
         ReactiveFormsModule,
@@ -65,16 +60,257 @@ describe('GenreComponent', () => {
     pagerService = new PagerService();
     fb = new FormBuilder();
     modalService = TestBed.get(NgbModal);
-    component = new GenreComponent(service,pagerService, modalService, fb);
+    component = new GenreComponent(service, pagerService, modalService, fb);
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GenreComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    // component = fixture.componentInstance;
+    // fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it("should load components and call life cycle methods", () => {
+    spyOn(component, "loadAllGenres");
+    component.ngOnInit();
+
+    expect(component.loadAllGenres).toHaveBeenCalled;
+  });
+
+  it("should load all genres via a mock-service - return mock data", () => {
+    const mockGenres = [
+      {
+        "genre_id": 38,
+        "genre_name": "Biographies & Memoirs"
+      },
+      {
+        "genre_id": 35,
+        "genre_name": "Business"
+      }
+    ];
+
+    spyOn(service, "getAll").and.returnValue(of(mockGenres));
+    component.ngOnInit();
+    expect(service).toBeTruthy();
+    expect(component.genres).toEqual(mockGenres);
+    expect(component.genres.length).toEqual(2)
+  });
+
+  it("should error on null getAll value", () => {
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    component.ngOnInit();
+    expect(service).toBeTruthy();
+    expect(component.genres).toBeUndefined();
+  });
+
+  it("should error on null getAll books value", () => {
+    spyOn(service, "getAll").and.returnValue(throwError({ status: 404 }));
+    component.loadAllBooks();
+    expect(service).toBeTruthy();
+    expect(component.books).toBeUndefined();
+  });
+
+  it("should ignore setpage out-of-bounds", () => {
+    let retVal = component.setPage(0);
+    expect(retVal).toEqual(1);
+  });
+
+  it("should open a modal window", fakeAsync(() => {
+    const mockGenre =
+    {
+      "genre_id": 38,
+      "genre_name": "Biographies & Memoirs"
+    };
+
+    const mockBooks = [
+      {
+        "bookId": 101,
+        "title": "1984",
+        "pubId": 2,
+        "publisher": [
+          {
+            "publisherId": 2,
+            "publisherName": "Penguin Random House"
+          }
+        ],
+        "authors": [
+          {
+            "authorId": 70,
+            "authorName": "George Orwell"
+          }
+        ],
+        "genres": [
+          {
+            "genre_id": 3,
+            "genre_name": "Literature"
+          }
+        ]
+      },
+      {
+        "bookId": 99,
+        "title": "A Brief History of Time",
+        "pubId": 2,
+        "publisher": [
+          {
+            "publisherId": 2,
+            "publisherName": "Penguin Random House"
+          }
+        ],
+        "authors": [
+          {
+            "authorId": 64,
+            "authorName": "Stephen Hawking"
+          }
+        ],
+        "genres": [
+          {
+            "genre_id": 28,
+            "genre_name": "Science & Math"
+          },
+          {
+            "genre_id": 33,
+            "genre_name": "Non-Fiction"
+          }
+        ]
+      }
+    ];
+
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    spyOn(service, "getAll").and.returnValue(of(mockBooks));
+    component.open("editGenreModal", mockGenre);
+    expect(service).toBeTruthy();
+    expect(component.totalBooks).toEqual(mockBooks);
+    expect(component.totalBooks.length).toEqual(2)
+  }));
+
+  it("should open a modal window for create", fakeAsync(() => {
+    const mockBooks = [
+      {
+        "bookId": 101,
+        "title": "1984",
+        "pubId": 2,
+        "publisher": [
+          {
+            "publisherId": 2,
+            "publisherName": "Penguin Random House"
+          }
+        ],
+        "authors": [
+          {
+            "authorId": 70,
+            "authorName": "George Orwell"
+          }
+        ],
+        "genres": [
+          {
+            "genre_id": 3,
+            "genre_name": "Literature"
+          }
+        ]
+      },
+      {
+        "bookId": 99,
+        "title": "A Brief History of Time",
+        "pubId": 2,
+        "publisher": [
+          {
+            "publisherId": 2,
+            "publisherName": "Penguin Random House"
+          }
+        ],
+        "authors": [
+          {
+            "authorId": 64,
+            "authorName": "Stephen Hawking"
+          }
+        ],
+        "genres": [
+          {
+            "genre_id": 28,
+            "genre_name": "Science & Math"
+          },
+          {
+            "genre_id": 33,
+            "genre_name": "Non-Fiction"
+          }
+        ]
+      }
+    ];
+
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    spyOn(service, "getAll").and.returnValue(of(mockBooks));
+    component.open("editGenreModal", null);
+    expect(service).toBeTruthy();
+  }));
+
+  it("should close a modal window", fakeAsync(() => {
+    const mockGenre =
+    {
+      "genre_id": 38,
+      "genre_name": "Biographies & Memoirs"
+    };
+
+    const mockBooks = [
+      {
+        "bookId": 101,
+        "title": "1984",
+        "pubId": 2,
+        "publisher": [
+          {
+            "publisherId": 2,
+            "publisherName": "Penguin Random House"
+          }
+        ],
+        "authors": [
+          {
+            "authorId": 70,
+            "authorName": "George Orwell"
+          }
+        ],
+        "genres": [
+          {
+            "genre_id": 3,
+            "genre_name": "Literature"
+          }
+        ]
+      },
+      {
+        "bookId": 99,
+        "title": "A Brief History of Time",
+        "pubId": 2,
+        "publisher": [
+          {
+            "publisherId": 2,
+            "publisherName": "Penguin Random House"
+          }
+        ],
+        "authors": [
+          {
+            "authorId": 64,
+            "authorName": "Stephen Hawking"
+          }
+        ],
+        "genres": [
+          {
+            "genre_id": 28,
+            "genre_name": "Science & Math"
+          },
+          {
+            "genre_id": 33,
+            "genre_name": "Non-Fiction"
+          }
+        ]
+      }
+    ];
+
+    spyOn(modalService, "open").and.returnValue(mockModalRef);
+    spyOn(service, "getAll").and.returnValue(of(mockBooks));
+    mockModalRef.result = new Promise((resolve, reject) => reject("error"));
+    component.open("editAuthorModal", mockGenre);
+    tick();
+    expect(component.closeResult).toBe("Dismissed");
+  }));
 });

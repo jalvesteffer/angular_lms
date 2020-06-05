@@ -57,9 +57,7 @@ export class GenreComponent implements OnInit {
     this.initializeFormGroup();
   }
 
-  onItemSelect() {
-    console.log("select");
-  }
+  // onItemSelect() { }
 
   initializeFormGroup() {
     this.updateGenreForm = new FormGroup({
@@ -204,7 +202,7 @@ export class GenreComponent implements OnInit {
 
   setPage(page: number) {
     if (page < 1 || page > this.pager.totalGenres) {
-      return;
+      return 1;
     }
     this.pager = this.pagerService.getPager(this.totalGenres, page, this.pageSize);
     this.pagedResults = this.genres.slice(

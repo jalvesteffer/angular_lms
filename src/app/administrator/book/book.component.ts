@@ -136,9 +136,8 @@ export class BookComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit() { }
-
-  onItemSelect() { }
+  // ngAfterViewInit() { }
+  // onItemSelect() { }
 
   async loadAllAuthors() {
     this.lmsService.getAll(`${environment.appUrl}${environment.readAuthorsURI}`)
@@ -288,7 +287,7 @@ export class BookComponent implements OnInit {
 
   setPage(page: number) {
     if (page < 1 || page > this.pager.totalBooks) {
-      return;
+      return 1;
     }
     this.pager = this.pagerService.getPager(this.totalBooks, page, this.pageSize);
     this.pagedResults = this.books.slice(

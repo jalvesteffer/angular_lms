@@ -61,7 +61,7 @@ export class BorrowerAdminComponent implements OnInit {
     this.initializeFormGroup();
   }
 
-  onItemSelect() { }
+  // onItemSelect() { }
 
   initializeFormGroup() {
     this.updateBorrowerForm = new FormGroup({
@@ -196,7 +196,7 @@ export class BorrowerAdminComponent implements OnInit {
 
   setPage(page: number) {
     if (page < 1 || page > this.pager.totalBorrowers) {
-      return;
+      return 1;
     }
     this.pager = this.pagerService.getPager(this.totalBorrowers, page, this.pageSize);
     this.pagedResults = this.borrowers.slice(
