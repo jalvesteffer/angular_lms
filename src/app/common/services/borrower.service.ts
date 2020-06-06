@@ -22,6 +22,16 @@ export class BorrowerService {
       );
   }
 
+  getAllBranches(): Observable<Book[]> {
+    return this.http
+      .get<Book[]>(`${this.apiRoot}/branches/1/books`)
+      .pipe(
+        map((res) =>
+          res.map((b) => new Book(b.bookId, b.branchId, b.noOfCopies, b.title))
+        )
+      );
+  }
+
   search(searchTerm): Observable<Book[]> {
     return this.http
       .get<Book[]>(`${this.apiRoot}/branches/1/books`)
