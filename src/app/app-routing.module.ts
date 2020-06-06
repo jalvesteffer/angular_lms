@@ -78,10 +78,10 @@ const routes: Routes = [
         path: "lms/librarian/copies",
         component: CopiesLibraryComponent,
       },
-      {
-        path: "**",
-        component: LmserrorComponent,
-      },
+      // {
+      //   path: "**",
+      //   component: LmserrorComponent,
+      // },
     ]
   }
 ];
