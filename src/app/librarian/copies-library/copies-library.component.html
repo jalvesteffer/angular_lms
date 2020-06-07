@@ -38,8 +38,8 @@
     </div>
   </div>
 <!-- book copies information -->
-  <table class="table table-bordered table-dark">
-    <thead>
+  <table class="table table-striped">
+    <thead class="thead-dark">
       <tr>
         <th scope="col"></th>
         <th scope="col">Title</th>
@@ -56,7 +56,7 @@
         <td>{{ b.branchName }}</td>
         <td>{{ b.noOfCopies}}</td>
         <td></td>
-        <td><button type="button" class="btn btn-secondary" (click)="(open(updateBookCopiesModal, b))">Edit</button></td>
+        <td><button type="button" class="btn btn-outline-dark btn-block" (click)="(open(updateBookCopiesModal, b))">Edit</button></td>
       </tr>
     </tbody>
   </table>
