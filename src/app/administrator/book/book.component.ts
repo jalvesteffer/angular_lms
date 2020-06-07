@@ -40,6 +40,10 @@ export class BookComponent implements OnInit {
   genresDropdownSettings: any;
   publishersDropdownSettings: any;
 
+  // For CRUD feedback
+  feedbackMsg: string;
+  feedbackStyle: string;
+  
   // Sort
   searchForm: FormGroup;
   searchString: string;
@@ -197,6 +201,7 @@ export class BookComponent implements OnInit {
     this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteBooksURI}`, bookId)
       .subscribe((res) => {
         this.loadAllBooks();
+
       },
         (error) => {
           console.log('Error with deleteObj');
@@ -226,9 +231,13 @@ export class BookComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllBooks();
           this.modalService.dismissAll();
+
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = book.title + " was created";
         },
           (error) => {
-            console.log("error creating book");
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = book.title + " could not be created";
           }
         );
     }
@@ -238,9 +247,13 @@ export class BookComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllBooks();
           this.modalService.dismissAll();
+
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = book.title + " was updated";
         },
           (error) => {
-            console.log("error updating book");
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = book.title + " could not be updated";
           }
         );
     }
