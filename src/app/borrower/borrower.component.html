@@ -1,17 +1,23 @@
-<div class="container-fluid">
+<!-- font awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<script src="https://use.fontawesome.com/ca9c43d64a.js"></script>
+
+<div class="container marketing">
+  <!-- Three columns of text below the carousel -->
   <div class="row">
-    <div id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-      <div class="sidebar-sticky pt-3">
-        <span>Nav, Search, Filters</span>
-        
+    <div class="col-lg-6">
+      <a class="icon"><i class="fa fa-id-card fa-5x " aria-hidden="true" style="padding: 20px 40px"></i></a>
+      <h2>Return Book</h2>
+      <p>
+        <a class="btn btn-secondary" routerLink="/lms/librarian/branches" role="button" style="margin: 15px">View details &raquo;</a>
+      </p>
+    </div>
+      <div class="col-lg-6">
+        <a class="icon"><i class="fa fa-book fa-5x" aria-hidden="true" style="padding: 20px 40px"></i></a>
+        <h2>Check Out Book</h2>
+        <p>
+          <a class="btn btn-secondary" routerLink="/lms/librarian/copies" role="button" style="margin: 15px">View details &raquo;</a>
+        </p>
       </div>
     </div>
-
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Branch Name | Borrower Name</h1> 
-      </div>
-      <app-borrower-book-list></app-borrower-book-list>
-    </main>
-  </div>
 </div>
