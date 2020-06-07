@@ -14,22 +14,22 @@
     </form>
   </div>
 </div>
+
+<!-- Heading -->
 <div class="container">
   <h1 class="display-4">Authors</h1>
   <p class="lead">Total number of Authors in LMS are {{ totalAuthors }} as of {{ today | date: "short" }}</p>
-
 </div>
 
+<!-- CRUD Feedback Area -->
+<div class="container">
+  <div>
+    <p [ngClass]="feedbackStyle">{{ feedbackMsg }}</p>
+  </div>
+</div>
+
+
 <div class="container marketing">
-
-
-
-
-
-
-
-
-
   <table class="table table-striped">
     <thead class="thead-dark">
       <tr>
@@ -50,8 +50,8 @@
         <td><span *ngFor="let b of a.books; let isLast=last">{{ b.title }}{{isLast ? '' : ', '}} </span></td>
         <td><button type="button" class="btn btn-outline-dark btn-block"
             (click)="(open(updateAuthorModal, a))">Edit</button></td>
-        <td><button type="button" class="btn btn-outline-danger btn-block"
-            (click)="deleteAuthor(a.authorId)">Delete</button></td>
+        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="deleteAuthor(a)">Delete</button>
+        </td>
       </tr>
     </tbody>
   </table>

@@ -26,6 +26,10 @@ export class AuthorComponent implements OnInit {
   totalBooks: any;
   dropdownSettings: any;
 
+  // For CRUD feedback
+  feedbackMsg: string;
+  feedbackStyle: string;
+
   // Sort
   searchForm: FormGroup;
   searchString: string;
@@ -125,14 +129,18 @@ export class AuthorComponent implements OnInit {
       );
   }
 
-  deleteAuthor(authorId) {
+  deleteAuthor(author) {
 
-    this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteAuthorsURI}`, authorId)
+    this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteAuthorsURI}`, author.authorId)
       .subscribe((res) => {
         this.loadAllAuthors();
+
+        this.feedbackStyle = "successMsg";
+        this.feedbackMsg = author.authorName + " was deleted";
       },
         (error) => {
-          ;
+          this.feedbackStyle = "failureMsg";
+          this.feedbackMsg = author.authorName + " could not be created";
         }
       );
   }
@@ -150,9 +158,13 @@ export class AuthorComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllAuthors();
           this.modalService.dismissAll();
+
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = author.authorName + " was created";
         },
           (error) => {
-            console.log("error creating new author");
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = author.authorName + " could not be created";
           }
         );
     }
@@ -162,9 +174,13 @@ export class AuthorComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllAuthors();
           this.modalService.dismissAll();
+
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = author.authorName + " was updated";
         },
           (error) => {
-            ;
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = author.authorName + " could not be updated";
           }
         );
     }
