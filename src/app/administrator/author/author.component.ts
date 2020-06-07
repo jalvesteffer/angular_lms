@@ -66,11 +66,7 @@ export class AuthorComponent implements OnInit {
 
   initializeFormGroup() {
     this.updateAuthorForm = new FormGroup({
-      authorName: new FormControl(this.authorName, [
-        Validators.required,
-        Validators.maxLength(45),
-        Validators.minLength(3),
-      ]),
+      authorName: new FormControl(this.authorName),
       authorId: new FormControl(this.authorId),
       books: new FormControl(this.books),
     });
@@ -193,13 +189,13 @@ export class AuthorComponent implements OnInit {
       this.updateAuthorForm = this.fb.group({
         books: [obj.books],
         authorId: obj.authorId,
-        authorName: obj.authorName
+        authorName: [obj.authorName, [Validators.required, Validators.minLength(3), Validators.maxLength(45)]]
       })
     } else {
       this.updateAuthorForm = this.fb.group({
         books: null,
         authorId: null,
-        authorName: ""
+        authorName: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(45)]]
       })
     }
 
