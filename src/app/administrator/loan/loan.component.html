@@ -2,32 +2,35 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <script src="https://use.fontawesome.com/ca9c43d64a.js"></script>
 <!-- start of container -->
+
+<!-- Sort by Name -->
+<div class="row">
+  <div class="col-lg-8"></div>
+  <div class="col-lg-4">
+    <form [formGroup]="searchForm" class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+      <i class="fas fa-search"></i>
+      <input type="text" class="form-control form-control-sm ml-3 w-75" formControlName="searchString"
+        (input)="search()" placeholder="Search By Card Number" aria-label="Search By Card Number" />
+    </form>
+  </div>
+</div>
+
+<!-- Heading -->
+<div class="container">
+  <h1 class="display-4">Book Loans</h1>
+  <p class="lead">Total number of Overdue Loans in LMS are {{ totalLoans }} as of {{ today | date: "short" }}</p>
+</div>
+
+<!-- CRUD Feedback Area -->
+<div class="container">
+  <div>
+    <p [ngClass]="feedbackStyle">{{ feedbackMsg }}</p>
+  </div>
+</div>
+
 <div class="container marketing">
-  <h2>Total number of Overdue Loans in LMS are {{ totalLoans }} as of {{ today | date: "short" }}</h2>
-
-  <!-- Sort by Name -->
-  <div class="row">
-    <div class="col-lg-8"></div>
-    <div class="col-lg-4">
-      <form [formGroup]="searchForm" class="form-inline d-flex justify-content-center md-form form-sm mt-0">
-        <i class="fas fa-search"></i>
-        <input type="text" class="form-control form-control-sm ml-3 w-75" formControlName="searchString"
-          (input)="search()" placeholder="Search By Card Number" aria-label="Search By Card Number" />
-      </form>
-    </div>
-  </div>
-  <br>
-
-  <!-- pagination -->
-  <div class="ds-l-row ds-u-margin-top--3">
-    <div class="ds-l-col--9">
-      <ngb-pagination [collectionSize]="totalLoans" [(page)]="pager.currentPage" [maxSize]="5" [boundaryLinks]="true"
-        (pageChange)="setPage($event)"></ngb-pagination>
-    </div>
-  </div>
-
-  <table class="table table-bordered table-dark">
-    <thead>
+  <table class="table table-striped">
+    <thead class="thead-dark">
       <tr>
         <th scope="col"></th>
         <th scope="col">Borrower</th>
@@ -44,8 +47,16 @@
         <td>{{ l.book[0].title }}</td>
         <td>{{ l.branch[0].branchName }}</td>
         <td>{{ l.dueDate.substring(0,10) }}</td>
-        <td><button type="button" class="btn btn-danger" (click)="extendLoan(l.loanId)">Extend</button></td>
+        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="extendLoan(l.loanId)">Extend</button></td>
       </tr>
     </tbody>
   </table>
+
+  <!-- pagination -->
+  <div class="ds-l-row ds-u-margin-top--3">
+    <div class="ds-l-col--9">
+      <ngb-pagination [collectionSize]="totalLoans" [(page)]="pager.currentPage" [maxSize]="5" [boundaryLinks]="true"
+        (pageChange)="setPage($event)"></ngb-pagination>
+    </div>
+  </div>
 </div>

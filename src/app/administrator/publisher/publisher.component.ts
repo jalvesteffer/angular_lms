@@ -26,6 +26,10 @@ export class PublisherComponent implements OnInit {
   publisherPhone: string;
   dropdownSettings: any;
 
+  // For CRUD feedback
+  feedbackMsg: string;
+  feedbackStyle: string;
+
   // Sort
   searchForm: FormGroup;
   searchString: string;
@@ -140,9 +144,13 @@ export class PublisherComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllPublishers();
           this.modalService.dismissAll();
+
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = publisher.publisherName + " was created";
         },
           (error) => {
-            console.log("error with postObj");
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = publisher.publisherName + " could not be created";
           }
         );
     }
@@ -152,9 +160,13 @@ export class PublisherComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllPublishers();
           this.modalService.dismissAll();
+        
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = publisher.publisherName + " was updated";
         },
           (error) => {
-            console.log("error with updateObj");
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = publisher.publisherName + " could not be updated";
           }
         );
     }

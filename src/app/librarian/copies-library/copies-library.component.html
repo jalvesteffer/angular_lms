@@ -1,31 +1,66 @@
 <!-- font awesome -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <script src="https://use.fontawesome.com/ca9c43d64a.js"></script>
-
 <!-- start of book copies container -->
-<div class="container marketing">
-  <h2>Total number of records that matched the request are {{ totalBookCopies }} as of {{ today | date: "short" }}</h2>
-  <h3><button type="button" class="btn btn-primary" (click)="open(addBookCopiesModal, null)">Add Book</button></h3>
-  
-  <!-- Sort by Book -->
-  <div class="row">
-    <div class="col-lg-8"></div>
-    <div class="col-lg-4">
-      <form [formGroup]="searchBookCopiesForm" class="form-inline d-flex justify-content-center md-form form-sm mt-0">
-        <i class="fas fa-search"></i>
-        <input
-          type="text"
-          class="form-control form-control-sm ml-3 w-75" 
-          formControlName="searchString"
-          (input)="searchBookCopies()"
-          placeholder="Search By Book"
-          aria-label="Search By Book"
-        />
-      </form>
-    </div>
+
+<!-- Sort by Book -->
+<div class="row">
+  <div class="col-lg-8"></div>
+  <div class="col-lg-4">
+    <form [formGroup]="searchBookCopiesForm" class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        class="form-control form-control-sm ml-3 w-75" 
+        formControlName="searchString"
+        (input)="searchBookCopies()"
+        placeholder="Search By Book"
+        aria-label="Search By Book"
+      />
+    </form>
   </div>
-  <br>
-<!-- pagination -->
+</div>
+
+<!-- Heading -->
+<div class="container">
+  <h1 class="display-4">Book Copies</h1>
+  <p class="lead">Total number of records that matched the request are {{ totalBookCopies }} as of {{ today | date: "short" }}</p>
+</div>
+
+<!-- CRUD Feedback Area -->
+<div class="container">
+  <div>
+    <p [ngClass]="feedbackStyle">{{ feedbackMsg }}</p>
+  </div>
+</div>
+
+<!-- book copies information -->
+<div class="container marketing">
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Title</th>
+        <th scope="col">Library</th>
+        <th scope="col">Number of Copies</th>
+        <th scope="col" colspan="2">
+          <button type="button" class="btn btn-outline-light btn-block" (click)="open(addBookCopies, null)">Add
+            Book Copies</button>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let b of pagedBookCopies; let i = index">
+        <th scope="row">{{ (pageSize * (pager.currentPage -1)) + (i+1) }}</th>
+        <td>{{ b.title }}</td>
+        <td>{{ b.branchName }}</td>
+        <td>{{ b.noOfCopies}}</td>
+        
+        <td><button type="button" class="btn btn-outline-dark btn-block" (click)="(open(updateBookCopiesModal, b))">Edit</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- pagination -->
   <div class="ds-l-row ds-u-margin-top--3">
     <div class="ds-l-col--9">
       <ngb-pagination
@@ -37,29 +72,6 @@
       ></ngb-pagination>
     </div>
   </div>
-<!-- book copies information -->
-  <table class="table table-striped">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col"></th>
-        <th scope="col">Title</th>
-        <th scope="col">Library</th>
-        <th scope="col">Number of Copies</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let b of pagedBookCopies; let i = index">
-        <th scope="row">{{ (pageSize * (pager.currentPage -1)) + (i+1) }}</th>
-        <td>{{ b.title }}</td>
-        <td>{{ b.branchName }}</td>
-        <td>{{ b.noOfCopies}}</td>
-        <td></td>
-        <td><button type="button" class="btn btn-outline-dark btn-block" (click)="(open(updateBookCopiesModal, b))">Edit</button></td>
-      </tr>
-    </tbody>
-  </table>
 </div>
 
 <ng-template #addBookCopiesModal let-c="close" let-d="dismiss">

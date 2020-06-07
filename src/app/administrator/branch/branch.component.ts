@@ -25,6 +25,10 @@ export class BranchComponent implements OnInit {
   branchAddress: string;
   dropdownSettings: any;
 
+  // For CRUD feedback
+  feedbackMsg: string;
+  feedbackStyle: string;
+  
   // Sort
   searchForm: FormGroup;
   searchString: string;
@@ -137,9 +141,13 @@ export class BranchComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllBranches();
           this.modalService.dismissAll();
+
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = branch.branchName + " was created";
         },
           (error) => {
-            console.log("error with postObj");
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = branch.branchName + " could not be created";
           }
         );
     }
@@ -149,9 +157,13 @@ export class BranchComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllBranches();
           this.modalService.dismissAll();
+
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = branch.branchName + " was updated";
         },
           (error) => {
-            console.log("error with updateObj");
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = branch.branchName + " could not be updated";
           }
         );
     }

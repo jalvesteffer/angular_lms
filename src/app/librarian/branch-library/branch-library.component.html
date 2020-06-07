@@ -2,39 +2,40 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <script src="https://use.fontawesome.com/ca9c43d64a.js"></script>
 <!-- start of branch container -->
-<div class="container marketing">
-  <h2>Total number of Branches in LMS are {{ totalBranches }} as of {{ today | date: "short" }}</h2>
-  <!-- Sort by Branch Name -->
-  <div class="row">
-    <div class="col-lg-8"></div>
-    <div class="col-lg-4">
-      <form [formGroup]="searchBranchForm" class="form-inline d-flex justify-content-center md-form form-sm mt-0">
-        <i class="fas fa-search"></i>
-        <input
-          type="text"
-          class="form-control form-control-sm ml-3 w-75" 
-          formControlName="searchString"
-          (input)="searchBranches()"
-          placeholder="Search By Library Name"
-          aria-label="Search By Library Name"
-        />
-      </form>
-    </div>
+
+<!-- Sort by Branch Name -->
+<div class="row">
+  <div class="col-lg-8"></div>
+  <div class="col-lg-4">
+    <form [formGroup]="searchBranchForm" class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        class="form-control form-control-sm ml-3 w-75" 
+        formControlName="searchString"
+        (input)="searchBranches()"
+        placeholder="Search By Library Name"
+        aria-label="Search By Library Name"
+      />
+    </form>
   </div>
-  <br>
-  <!-- pagination -->
-  <div class="ds-l-row ds-u-margin-top--3">
-    <div class="ds-l-col--9">
-      <ngb-pagination
-        [collectionSize]="totalBranches"
-        [(page)]="pager.currentPage"
-        [maxSize]="5"
-        [boundaryLinks]="true"
-        (pageChange)="setPage($event)"
-      ></ngb-pagination>
-    </div>
+</div>
+
+<!-- Heading -->
+<div class="container">
+  <h1 class="display-4">Library Branches</h1>
+  <p class="lead">Total number of Authors in LMS are {{ totalBranches }} as of {{ today | date: "short" }}</p>
+</div>
+
+<!-- CRUD Feedback Area -->
+<div class="container">
+  <div>
+    <p [ngClass]="feedbackStyle">{{ feedbackMsg }}</p>
   </div>
+</div>
+
 <!-- branch information -->
+<div class="container marketing">
   <table class="table table-striped">
     <thead class="thead-dark">
       <tr>
@@ -55,6 +56,14 @@
       </tr>
     </tbody>
   </table>
+
+  <!-- pagination -->
+  <div class="ds-l-row ds-u-margin-top--3">
+    <div class="pagination justify-content-center">
+      <ngb-pagination [collectionSize]="totalBranches" [(page)]="pager.currentPage" [maxSize]="5" [boundaryLinks]="true"
+          (pageChange)="setPage($event)"></ngb-pagination>
+    </div>
+  </div>
 </div>
 
 <ng-template #updateBranchModal let-c="close" let-d="dismiss">

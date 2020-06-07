@@ -28,6 +28,10 @@ export class BranchLibraryComponent implements OnInit {
   closeResult: any;
   selectedObj: any;
 
+  // For CRUD feedback
+  feedbackMsg: string;
+  feedbackStyle: string;
+
   //sort
   searchBranchForm: FormGroup;
   searchString: string;
@@ -113,8 +117,13 @@ export class BranchLibraryComponent implements OnInit {
         (res) => {
           this.loadAllBranches();
           this.modalService.dismissAll();
+
+        this.feedbackStyle = "successMsg";
+        this.feedbackMsg = branch.branchName + " was updated";
         },
         (error) => {
+          this.feedbackStyle = "failureMsg";
+          this.feedbackMsg = branch.branchName + " could not be updated";
         }
       );
   }

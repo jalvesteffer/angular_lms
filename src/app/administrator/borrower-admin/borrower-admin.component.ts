@@ -30,6 +30,10 @@ export class BorrowerAdminComponent implements OnInit {
 
   dropdownSettings: any;
 
+  // For CRUD feedback
+  feedbackMsg: string;
+  feedbackStyle: string;
+  
   // Sort
   searchForm: FormGroup;
   searchString: string;
@@ -144,9 +148,13 @@ export class BorrowerAdminComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllBorrowers();
           this.modalService.dismissAll();
+
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = borrower.name + " was created";
         },
           (error) => {
-            console.log("error with postObj");
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = borrower.name + " could not be created";
           }
         );
     }
@@ -156,9 +164,13 @@ export class BorrowerAdminComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllBorrowers();
           this.modalService.dismissAll();
+        
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = borrower.name + " was updated";
         },
           (error) => {
-            console.log("error with updateObj");
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = borrower.name + " could not be updated";
           }
         );
     }

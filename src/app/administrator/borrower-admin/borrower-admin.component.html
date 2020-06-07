@@ -2,43 +2,42 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <script src="https://use.fontawesome.com/ca9c43d64a.js"></script>
 <!-- start of container -->
+
+<!-- Sort by Name -->
+<div class="row">
+  <div class="col-lg-8"></div>
+  <div class="col-lg-4">
+    <form [formGroup]="searchForm" class="form-inline d-flex justify-content-center md-form form-sm mt-0">
+      <i class="fas fa-search"></i>
+      <input type="text" class="form-control form-control-sm ml-3 w-75" formControlName="searchString"
+        (input)="search()" placeholder="Search By Borrower Name" aria-label="Search By Borrower Name" />
+    </form>
+  </div>
+</div>
+
+<!-- Heading -->
+<div class="container">
+  <h1 class="display-4">Borrowers</h1>
+  <p class="lead">Total number of Borrowers in LMS are {{ totalBorrowers }} as of {{ today | date: "short" }}</p>
+</div>
+
+<!-- CRUD Feedback Area -->
+<div class="container">
+  <div>
+    <p [ngClass]="feedbackStyle">{{ feedbackMsg }}</p>
+  </div>
+</div>
+
 <div class="container marketing">
-  <h2>Total number of Borrowers in LMS are {{ totalBorrowers }} as of {{ today | date: "short" }}</h2>
-
-  <!-- Sort by Name -->
-  <div class="row">
-    <div class="col-lg-8"></div>
-    <div class="col-lg-4">
-      <form [formGroup]="searchForm" class="form-inline d-flex justify-content-center md-form form-sm mt-0">
-        <i class="fas fa-search"></i>
-        <input type="text" class="form-control form-control-sm ml-3 w-75" formControlName="searchString"
-          (input)="search()" placeholder="Search By Borrower Name" aria-label="Search By Borrower Name" />
-      </form>
-    </div>
-  </div>
-  <br>
-
-
-  <h3><button type="button" class="btn btn-primary" (click)="open(updateBorrowerModal, null)">Add Borrower</button>
-  </h3>
-
-  <!-- pagination -->
-  <div class="ds-l-row ds-u-margin-top--3">
-    <div class="ds-l-col--9">
-      <ngb-pagination [collectionSize]="totalBorrowers" [(page)]="pager.currentPage" [maxSize]="5"
-        [boundaryLinks]="true" (pageChange)="setPage($event)"></ngb-pagination>
-    </div>
-  </div>
-
-  <table class="table table-bordered table-dark">
-    <thead>
+  <table class="table table-striped">
+    <thead class="thead-dark">
       <tr>
         <th scope="col"></th>
         <th scope="col">Name</th>
         <th scope="col">Address</th>
         <th scope="col">Phone</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
+        <th scope="col" colspan="2">
+          <button type="button" class="btn btn-outline-light btn-block" (click)="open(updateBorrowerModal, null)">Add Borrower</button>
       </tr>
     </thead>
     <tbody>
@@ -47,11 +46,19 @@
         <td>{{ b.name }}</td>
         <td>{{ b.address }}</td>
         <td>{{ b.phone }}</td>
-        <td><button type="button" class="btn btn-secondary" (click)="(open(updateBorrowerModal, b))">Edit</button></td>
-        <td><button type="button" class="btn btn-danger" (click)="deleteBorrower(b.cardNo)">Delete</button></td>
+        <td><button type="button" class="btn btn-outline-dark btn-block" (click)="(open(updateBorrowerModal, b))">Edit</button></td>
+        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="deleteBorrower(b.cardNo)">Delete</button></td>
       </tr>
     </tbody>
   </table>
+
+  <!-- pagination -->
+  <div class="ds-l-row ds-u-margin-top--3">
+    <div class="ds-l-col--9">
+      <ngb-pagination [collectionSize]="totalBorrowers" [(page)]="pager.currentPage" [maxSize]="5"
+        [boundaryLinks]="true" (pageChange)="setPage($event)"></ngb-pagination>
+    </div>
+  </div>
 </div>
 
 <ng-template #updateBorrowerModal let-c="close" let-d="dismiss">

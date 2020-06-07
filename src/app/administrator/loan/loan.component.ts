@@ -27,6 +27,10 @@ export class LoanComponent implements OnInit {
   errMsg: any;
   closeResult: any;
 
+  // For CRUD feedback
+  feedbackMsg: string;
+  feedbackStyle: string;
+  
   // Sort
   searchForm: FormGroup;
   searchString: string;

@@ -32,6 +32,10 @@ export class CopiesLibraryComponent implements OnInit {
   errMsg: any;
   closeResult: any;
   
+   // For CRUD feedback
+   feedbackMsg: string;
+   feedbackStyle: string;
+
   //sort
   searchBookCopiesForm: FormGroup;
   searchString: string;
@@ -181,6 +185,7 @@ export class CopiesLibraryComponent implements OnInit {
   updateBookCopies() {
     const bookCopy = {
       bookId: this.updateBookCopiesForm.value.bookId,
+      title: this.title,
       branchId: this.updateBookCopiesForm.value.branchId,
       noOfCopies: this.updateBookCopiesForm.value.noOfCopies
     }
@@ -188,8 +193,13 @@ export class CopiesLibraryComponent implements OnInit {
       .subscribe((res) => {
         this.loadAllCopies();
         this.modalService.dismissAll();
+
+        this.feedbackStyle = "successMsg";
+        this.feedbackMsg = bookCopy.title + " from "+ this.branchName + " was updated";
       },
         (error) => {
+          this.feedbackStyle = "failureMsg";
+          this.feedbackMsg = bookCopy.title + " from "+ this.branchName +  " could not be updated";
         }
       );
   }
@@ -206,8 +216,13 @@ export class CopiesLibraryComponent implements OnInit {
       .subscribe((res) => {
         this.loadAllCopies();
         this.modalService.dismissAll();
+
+        this.feedbackStyle = "successMsg";
+        this.feedbackMsg = bookCopy.title + " was add to " + bookCopy.branchName;
       },
         (error) => {
+          this.feedbackStyle = "failureMsg";
+          this.feedbackMsg = bookCopy.title + " could not be add to " + bookCopy.branchName;
         }
       );
   }

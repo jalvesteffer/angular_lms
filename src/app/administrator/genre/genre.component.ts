@@ -26,6 +26,10 @@ export class GenreComponent implements OnInit {
   totalBooks: any;
   dropdownSettings: any;
 
+  // For CRUD feedback
+  feedbackMsg: string;
+  feedbackStyle: string;
+
   // Sort
   searchForm: FormGroup;
   searchString: string;
@@ -138,9 +142,13 @@ export class GenreComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllGenres();
           this.modalService.dismissAll();
+
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = genre.genre_name + " was created";
         },
           (error) => {
-            console.log("error with postObj");
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = genre.genre_name + " could not be created";
           }
         );
     }
@@ -150,9 +158,13 @@ export class GenreComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllGenres();
           this.modalService.dismissAll();
+        
+          this.feedbackStyle = "successMsg";
+          this.feedbackMsg = genre.genre_name + " was updated";
         },
           (error) => {
-            console.log('Error with updateObj');
+            this.feedbackStyle = "failureMsg";
+            this.feedbackMsg = genre.genre_name + " could not be updated";
           }
         );
     }
