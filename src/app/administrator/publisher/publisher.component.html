@@ -38,7 +38,8 @@
         <th scope="col">Address</th>
         <th scope="col">Phone</th>
         <th scope="col" colspan="2">
-          <button type="button" class="btn btn-outline-light btn-block" (click)="open(updatePublisherModal, null)">Add Publisher</button>
+          <button type="button" class="btn btn-outline-light btn-block" (click)="open(updatePublisherModal, null)">Add
+            Publisher</button>
       </tr>
     </thead>
     <tbody>
@@ -47,8 +48,10 @@
         <td>{{ p.publisherName }}</td>
         <td>{{ p.publisherAddress }}</td>
         <td>{{ p.publisherPhone }}</td>
-        <td><button type="button" class="btn btn-outline-dark btn-block" (click)="(open(updatePublisherModal, p))">Edit</button></td>
-        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="deletePublisher(p.publisherId)">Delete</button></td>
+        <td><button type="button" class="btn btn-outline-dark btn-block"
+            (click)="(open(updatePublisherModal, p))">Edit</button></td>
+        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="deletePublisher(p)">Delete</button>
+        </td>
       </tr>
     </tbody>
   </table>

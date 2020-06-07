@@ -37,7 +37,8 @@
         <th scope="col">Address</th>
         <th scope="col">Phone</th>
         <th scope="col" colspan="2">
-          <button type="button" class="btn btn-outline-light btn-block" (click)="open(updateBorrowerModal, null)">Add Borrower</button>
+          <button type="button" class="btn btn-outline-light btn-block" (click)="open(updateBorrowerModal, null)">Add
+            Borrower</button>
       </tr>
     </thead>
     <tbody>
@@ -46,8 +47,10 @@
         <td>{{ b.name }}</td>
         <td>{{ b.address }}</td>
         <td>{{ b.phone }}</td>
-        <td><button type="button" class="btn btn-outline-dark btn-block" (click)="(open(updateBorrowerModal, b))">Edit</button></td>
-        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="deleteBorrower(b.cardNo)">Delete</button></td>
+        <td><button type="button" class="btn btn-outline-dark btn-block"
+            (click)="(open(updateBorrowerModal, b))">Edit</button></td>
+        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="deleteBorrower(b)">Delete</button>
+        </td>
       </tr>
     </tbody>
   </table>

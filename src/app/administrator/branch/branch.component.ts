@@ -28,7 +28,7 @@ export class BranchComponent implements OnInit {
   // For CRUD feedback
   feedbackMsg: string;
   feedbackStyle: string;
-  
+
   // Sort
   searchForm: FormGroup;
   searchString: string;
@@ -116,14 +116,17 @@ export class BranchComponent implements OnInit {
       );
   }
 
-  deleteBranch(branchId) {
+  deleteBranch(branch) {
 
-    this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteBranchesURI}`, branchId)
+    this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteBranchesURI}`, branch.branchId)
       .subscribe((res) => {
         this.loadAllBranches();
+        this.feedbackStyle = "successMsg";
+        this.feedbackMsg = branch.branchName + " was deleted";
       },
         (error) => {
-          ;
+          this.feedbackStyle = "failureMsg";
+          this.feedbackMsg = branch.branchName + " could not be deleted";
         }
       );
   }

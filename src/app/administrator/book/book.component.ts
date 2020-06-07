@@ -43,7 +43,7 @@ export class BookComponent implements OnInit {
   // For CRUD feedback
   feedbackMsg: string;
   feedbackStyle: string;
-  
+
   // Sort
   searchForm: FormGroup;
   searchString: string;
@@ -197,14 +197,16 @@ export class BookComponent implements OnInit {
       );
   }
 
-  deleteBook(bookId) {
-    this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteBooksURI}`, bookId)
+  deleteBook(book) {
+    this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteBooksURI}`, book.bookId)
       .subscribe((res) => {
         this.loadAllBooks();
-
+        this.feedbackStyle = "successMsg";
+        this.feedbackMsg = book.title + " was deleted";
       },
         (error) => {
-          console.log('Error with deleteObj');
+          this.feedbackStyle = "failureMsg";
+          this.feedbackMsg = book.title + " could not be deleted";
         }
       );
   }

@@ -38,7 +38,8 @@
         <th scope="col">Publisher</th>
         <th scope="col">Genre(s)</th>
         <th scope="col" colspan="2">
-          <button type="button" class="btn btn-outline-light btn-block" (click)="open(updateBookModal, null)">Add Book</button>
+          <button type="button" class="btn btn-outline-light btn-block" (click)="open(updateBookModal, null)">Add
+            Book</button>
       </tr>
     </thead>
     <tbody>
@@ -48,8 +49,9 @@
         <td><span *ngFor="let a of b.authors; let isLast=last">{{ a.authorName }}{{isLast ? '' : ', '}} </span></td>
         <td><span *ngFor="let p of b.publisher; let isLast=last">{{ p.publisherName }} </span></td>
         <td><span *ngFor="let g of b.genres; let isLast=last">{{ g.genre_name }}{{isLast ? '' : ', '}} </span></td>
-        <td><button type="button" class="btn btn-outline-dark btn-block" (click)="(open(updateBookModal, b))">Edit</button></td>
-        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="deleteBook(b.bookId)">Delete</button></td>
+        <td><button type="button" class="btn btn-outline-dark btn-block"
+            (click)="(open(updateBookModal, b))">Edit</button></td>
+        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="deleteBook(b)">Delete</button></td>
       </tr>
     </tbody>
   </table>

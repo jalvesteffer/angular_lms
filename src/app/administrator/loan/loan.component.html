@@ -47,7 +47,7 @@
         <td>{{ l.book[0].title }}</td>
         <td>{{ l.branch[0].branchName }}</td>
         <td>{{ l.dueDate.substring(0,10) }}</td>
-        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="extendLoan(l.loanId)">Extend</button></td>
+        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="extendLoan(l)">Extend</button></td>
       </tr>
     </tbody>
   </table>
