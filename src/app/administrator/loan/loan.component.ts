@@ -30,7 +30,7 @@ export class LoanComponent implements OnInit {
   // For CRUD feedback
   feedbackMsg: string;
   feedbackStyle: string;
-  
+
   // Sort
   searchForm: FormGroup;
   searchString: string;
@@ -96,19 +96,22 @@ export class LoanComponent implements OnInit {
       );
   }
 
-  extendLoan(id) {
-    const loan = {
-      loanId: id
-    }
+  extendLoan(loan) {
+    // const loan = {
+    //   loanId: id
+    // }
 
     // perform insert if no publisher id set
     this.lmsService.updateObj(`${environment.appUrl}${environment.extendOverdueLoansURI}`, loan)
       .subscribe((res) => {
         this.loadAllOverdueLoans();
         this.modalService.dismissAll();
+        this.feedbackStyle = "successMsg";
+        this.feedbackMsg = "Due date for \"" + loan.book[0].title + "\" was extended";
       },
         (error) => {
-          this.errMsg = "error with updateObj";
+          this.feedbackStyle = "failureMsg";
+          this.feedbackMsg = "Due date for \"" + loan.book[0].title + "\" could not be extended";
         }
       );
   }

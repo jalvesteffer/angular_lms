@@ -1,5 +1,11 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #444;
+}
+
 .successMsg {
     color: green;
     margin-left: 10px;

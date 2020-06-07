@@ -117,14 +117,17 @@ export class GenreComponent implements OnInit {
       );
   }
 
-  deleteGenre(genre_id) {
+  deleteGenre(genre) {
 
-    this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteGenresURI}`, genre_id)
+    this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteGenresURI}`, genre.genre_id)
       .subscribe((res) => {
         this.loadAllGenres();
+        this.feedbackStyle = "successMsg";
+        this.feedbackMsg = genre.genre_name + " was deleted";
       },
         (error) => {
-          ;
+          this.feedbackStyle = "failureMsg";
+          this.feedbackMsg = genre.genre_name + " could not be deleted";
         }
       );
   }
@@ -158,7 +161,7 @@ export class GenreComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllGenres();
           this.modalService.dismissAll();
-        
+
           this.feedbackStyle = "successMsg";
           this.feedbackMsg = genre.genre_name + " was updated";
         },

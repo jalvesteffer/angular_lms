@@ -118,14 +118,17 @@ export class PublisherComponent implements OnInit {
       );
   }
 
-  deletePublisher(publisherId) {
+  deletePublisher(publisher) {
 
-    this.lmsService.deleteObj(`${environment.appUrl}${environment.deletePublishersURI}`, publisherId)
+    this.lmsService.deleteObj(`${environment.appUrl}${environment.deletePublishersURI}`, publisher.publisherId)
       .subscribe((res) => {
         this.loadAllPublishers();
+        this.feedbackStyle = "successMsg";
+        this.feedbackMsg = publisher.publisherName + " was deleted";
       },
         (error) => {
-          ;
+          this.feedbackStyle = "failureMsg";
+          this.feedbackMsg = publisher.publisherName + " could not be deleted";
         }
       );
   }
@@ -160,7 +163,7 @@ export class PublisherComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllPublishers();
           this.modalService.dismissAll();
-        
+
           this.feedbackStyle = "successMsg";
           this.feedbackMsg = publisher.publisherName + " was updated";
         },

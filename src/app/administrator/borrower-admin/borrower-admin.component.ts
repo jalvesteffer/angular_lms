@@ -33,7 +33,7 @@ export class BorrowerAdminComponent implements OnInit {
   // For CRUD feedback
   feedbackMsg: string;
   feedbackStyle: string;
-  
+
   // Sort
   searchForm: FormGroup;
   searchString: string;
@@ -122,14 +122,17 @@ export class BorrowerAdminComponent implements OnInit {
       );
   }
 
-  deleteBorrower(cardNo) {
+  deleteBorrower(borrower) {
 
-    this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteBorrowersURI}`, cardNo)
+    this.lmsService.deleteObj(`${environment.appUrl}${environment.deleteBorrowersURI}`, borrower.cardNo)
       .subscribe((res) => {
         this.loadAllBorrowers();
+        this.feedbackStyle = "successMsg";
+        this.feedbackMsg = borrower.name + " was deleted";
       },
         (error) => {
-          ;
+          this.feedbackStyle = "failureMsg";
+          this.feedbackMsg = borrower.name + " could not be deleted";
         }
       );
   }
@@ -164,7 +167,7 @@ export class BorrowerAdminComponent implements OnInit {
         .subscribe((res) => {
           this.loadAllBorrowers();
           this.modalService.dismissAll();
-        
+
           this.feedbackStyle = "successMsg";
           this.feedbackMsg = borrower.name + " was updated";
         },

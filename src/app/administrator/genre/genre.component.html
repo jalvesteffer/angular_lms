@@ -36,7 +36,8 @@
         <th scope="col">Genre</th>
         <th scope="col">Books Tagged with Genre</th>
         <th scope="col" colspan="2">
-          <button type="button" class="btn btn-outline-light btn-block" (click)="open(updateGenreModal, null)">Add Genre</button>
+          <button type="button" class="btn btn-outline-light btn-block" (click)="open(updateGenreModal, null)">Add
+            Genre</button>
       </tr>
     </thead>
     <tbody>
@@ -44,8 +45,9 @@
         <td scope="row">{{ (pageSize * (pager.currentPage - 1)) + (i + 1) }}</td>
         <td>{{ g.genre_name }}</td>
         <td><span *ngFor="let b of g.books; let isLast=last">{{ b.title }}{{isLast ? '' : ', '}} </span></td>
-        <td><button type="button" class="btn btn-outline-dark btn-block" (click)="(open(updateGenreModal, g))">Edit</button></td>
-        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="deleteGenre(g.genre_id)">Delete</button></td>
+        <td><button type="button" class="btn btn-outline-dark btn-block"
+            (click)="(open(updateGenreModal, g))">Edit</button></td>
+        <td><button type="button" class="btn btn-outline-danger btn-block" (click)="deleteGenre(g)">Delete</button></td>
       </tr>
     </tbody>
   </table>
