@@ -1,1 +1,13 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
+
+.successMsg {
+    color: green;
+    margin-left: 10px;
+    font-style: italic;
+}
+
+.failureMsg {
+    color: red;
+    margin-left: 10px;
+    font-style: italic;
+}
