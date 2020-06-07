@@ -54,7 +54,7 @@
 
   <!-- pagination -->
   <div class="ds-l-row ds-u-margin-top--3">
-    <div class="ds-l-col--9">
+    <div class="pagination justify-content-center">
       <ngb-pagination [collectionSize]="totalLoans" [(page)]="pager.currentPage" [maxSize]="5" [boundaryLinks]="true"
         (pageChange)="setPage($event)"></ngb-pagination>
     </div>

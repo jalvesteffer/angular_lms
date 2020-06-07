@@ -65,11 +65,7 @@ export class GenreComponent implements OnInit {
 
   initializeFormGroup() {
     this.updateGenreForm = new FormGroup({
-      genre_name: new FormControl(this.genre_name, [
-        Validators.required,
-        Validators.maxLength(45),
-        Validators.minLength(3),
-      ]),
+      genre_name: new FormControl(this.genre_name),
       genre_id: new FormControl(this.genre_id),
       books: new FormControl(this.books),
     });
@@ -180,13 +176,13 @@ export class GenreComponent implements OnInit {
       this.updateGenreForm = this.fb.group({
         books: [obj.books],
         genre_id: obj.genre_id,
-        genre_name: obj.genre_name
+        genre_name: [obj.genre_name, [Validators.required, Validators.minLength(3), Validators.maxLength(45)]]
       })
     } else {
       this.updateGenreForm = this.fb.group({
         books: null,
         genre_id: null,
-        genre_name: ""
+        genre_name: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(45)]]
       })
     }
 

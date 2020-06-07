@@ -99,11 +99,7 @@ export class BookComponent implements OnInit {
   initializeFormGroup() {
     this.updateBookForm = new FormGroup({
       bookId: new FormControl(this.bookId),
-      title: new FormControl(this.title, [
-        Validators.required,
-        Validators.maxLength(45),
-        Validators.minLength(3),
-      ]),
+      title: new FormControl(this.title),
       pubId: new FormControl(this.pubId),
       authors: new FormControl(this.authors),
       publisher: new FormControl(this.publisher),
@@ -268,7 +264,7 @@ export class BookComponent implements OnInit {
     if (obj !== null) {
       this.updateBookForm = this.fb.group({
         bookId: obj.bookId,
-        title: obj.title,
+        title: [obj.title, [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
         pubId: obj.pubId,
         publisherName: obj.publisherName,
         publisher: [obj.publisher],
@@ -278,7 +274,7 @@ export class BookComponent implements OnInit {
     } else {
       this.updateBookForm = this.fb.group({
         bookId: null,
-        title: "",
+        title: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
         pubId: null,
         publisherName: "",
         publisher: null,

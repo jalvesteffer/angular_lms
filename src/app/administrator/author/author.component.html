@@ -94,6 +94,7 @@
                 Author Name should be between 3-45 chars in length
               </div>
             </div>
+
             <p>Books Written:
               <ng-multiselect-dropdown [placeholder]="'Select Books(s)'" [data]="totalBooks" formControlName="books"
                 [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)">

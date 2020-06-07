@@ -64,11 +64,7 @@ export class BranchComponent implements OnInit {
 
   initializeFormGroup() {
     this.updateBranchForm = new FormGroup({
-      branchName: new FormControl(this.branchName, [
-        Validators.required,
-        Validators.maxLength(45),
-        Validators.minLength(3),
-      ]),
+      branchName: new FormControl(this.branchName),
       branchId: new FormControl(this.branchId),
       branchAddress: new FormControl(this.branchAddress)
     });
@@ -176,14 +172,14 @@ export class BranchComponent implements OnInit {
     if (obj !== null) {
       this.updateBranchForm = this.fb.group({
         branchId: obj.branchId,
-        branchName: obj.branchName,
-        branchAddress: obj.branchAddress
+        branchName: [obj.branchName, [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
+        branchAddress: [obj.branchAddress, [Validators.minLength(3), Validators.maxLength(45)]]
       })
     } else {
       this.updateBranchForm = this.fb.group({
         branchId: null,
-        branchName: "",
-        branchAddress: null
+        branchName: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
+        branchAddress: ["", [Validators.minLength(3), Validators.maxLength(45)]]
       })
     }
 

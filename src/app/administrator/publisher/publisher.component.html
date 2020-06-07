@@ -58,7 +58,7 @@
 
   <!-- pagination -->
   <div class="ds-l-row ds-u-margin-top--3">
-    <div class="ds-l-col--9">
+    <div class="pagination justify-content-center">
       <ngb-pagination [collectionSize]="totalPublishers" [(page)]="pager.currentPage" [maxSize]="5"
         [boundaryLinks]="true" (pageChange)="setPage($event)"></ngb-pagination>
     </div>
@@ -96,9 +96,30 @@
             </div>
 
             <p>Address:
-              <input class="form-control" id="publisherAddress" formControlName="publisherAddress" /></p>
+              <input class="form-control" id="publisherAddress" formControlName="publisherAddress" [ngClass]="{
+                'is-invalid': updatePublisherForm.controls['publisherAddress'].errors
+              }" /></p>
+            <div *ngIf="updatePublisherForm.controls['publisherAddress'].errors" class="error-msg">
+              <div [hidden]="
+                updatePublisherForm.controls['publisherAddress'].errors.maxLength ||
+                updatePublisherForm.controls['publisherAddress'].errors.minLength
+                  ">
+                Address should be between 3-45 chars in length
+              </div>
+            </div>
+
             <p>Phone:
-              <input class="form-control" id="publisherPhone" formControlName="publisherPhone" /></p>
+              <input class="form-control" id="publisherPhone" formControlName="publisherPhone" [ngClass]="{
+                'is-invalid': updatePublisherForm.controls['publisherPhone'].errors
+              }" /></p>
+            <div *ngIf="updatePublisherForm.controls['publisherPhone'].errors" class="error-msg">
+              <div [hidden]="
+                updatePublisherForm.controls['publisherPhone'].errors.maxLength ||
+                updatePublisherForm.controls['publisherPhone'].errors.minLength
+                  ">
+                Phone should be between 10-45 chars in length
+              </div>
+            </div>
 
           </div>
         </div>
