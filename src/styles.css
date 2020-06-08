@@ -6,6 +6,15 @@
     background-color: #444;
 }
 
+.div-button {
+    padding: 25px 0px;
+}
+
+.div-button:hover {
+    background-color: lightgrey;
+    cursor: pointer;
+}
+
 .successMsg {
     color: green;
     margin-left: 10px;

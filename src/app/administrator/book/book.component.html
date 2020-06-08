@@ -58,7 +58,7 @@
 
   <!-- pagination -->
   <div class="ds-l-row ds-u-margin-top--3">
-    <div class="ds-l-col--9">
+    <div class="pagination justify-content-center">
       <ngb-pagination [collectionSize]="totalBooks" [(page)]="pager.currentPage" [maxSize]="5" [boundaryLinks]="true"
         (pageChange)="setPage($event)"></ngb-pagination>
     </div>
@@ -78,7 +78,22 @@
         <div class="modal-body">
           <div class="form-group">
             <p>Title:
-              <input class="form-control" id="title" formControlName="title" /></p>
+              <input class="form-control" id="title" formControlName="title" [ngClass]="{
+                'is-invalid': updateBookForm.controls['title'].errors
+              }" /></p>
+            <div *ngIf="updateBookForm.controls['title'].errors" class="error-msg">
+              <div [hidden]="
+                    !updateBookForm.controls['title'].errors.required
+                  ">
+                Title is required
+              </div>
+              <div [hidden]="
+                updateBookForm.controls['title'].errors.maxLength ||
+                updateBookForm.controls['title'].errors.minLength
+                  ">
+                Title should be between 3-45 chars in length
+              </div>
+            </div>
 
             <p>Author(s):
               <ng-multiselect-dropdown [placeholder]="'Select Author(s)'" [data]="totalAuthors"
