@@ -321,16 +321,49 @@ describe('LoanComponent', () => {
     spyOn(service, "updateObj").and.returnValue(of(mockLoans));
     spyOn(component, "loadAllOverdueLoans");
     expect(service).toBeTruthy();
-    component.extendLoan(3);
+    component.extendLoan(mockLoans);
     tick();
     expect(component.loadAllOverdueLoans).toHaveBeenCalled();
   }));
 
   it("should error", fakeAsync(() => {
+    const mockLoans = [
+      {
+        "loanId": 3,
+        "bookId": 99,
+        "branchId": 9,
+        "cardNo": 5,
+        "dateOut": "2020-05-22T04:28:29.000Z",
+        "dueDate": "2020-05-29T04:28:29.000Z",
+        "dateIn": null,
+        "book": [
+          {
+            "bookId": 99,
+            "title": "A Brief History of Time",
+            "pubId": 2
+          }
+        ],
+        "branch": [
+          {
+            "branchId": 9,
+            "branchName": "City of Fairfax Regional Library",
+            "branchAddress": "Fairfax, VA"
+          }
+        ],
+        "borrower": [
+          {
+            "cardNo": 5,
+            "name": "Bob Evans",
+            "address": "Charlottesville, VA",
+            "phone": "703-727-5223"
+          }
+        ]
+      }
+    ];
     spyOn(service, "updateObj").and.returnValue(throwError({ status: 404 }));
     expect(service).toBeTruthy();
-    component.extendLoan(3);
+    component.extendLoan(mockLoans);
     tick();
-    expect(component.errMsg).toBe("error with updateObj");
+    expect(component.feedbackMsg).toBe("Due date for loan could not be extended");
   }));
 });

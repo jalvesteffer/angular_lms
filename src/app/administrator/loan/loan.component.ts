@@ -97,21 +97,17 @@ export class LoanComponent implements OnInit {
   }
 
   extendLoan(loan) {
-    // const loan = {
-    //   loanId: id
-    // }
-
     // perform insert if no publisher id set
     this.lmsService.updateObj(`${environment.appUrl}${environment.extendOverdueLoansURI}`, loan)
       .subscribe((res) => {
         this.loadAllOverdueLoans();
         this.modalService.dismissAll();
         this.feedbackStyle = "successMsg";
-        this.feedbackMsg = "Due date for \"" + loan.book[0].title + "\" was extended";
+        this.feedbackMsg = "Due date for loan was extended";
       },
         (error) => {
           this.feedbackStyle = "failureMsg";
-          this.feedbackMsg = "Due date for \"" + loan.book[0].title + "\" could not be extended";
+          this.feedbackMsg = "Due date for loan could not be extended";
         }
       );
   }
