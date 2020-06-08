@@ -44,8 +44,9 @@
         <th scope="col">Library</th>
         <th scope="col">Number of Copies</th>
         <th scope="col" colspan="2">
-          <button type="button" class="btn btn-outline-light btn-block" (click)="open(addBookCopies, null)">Add
+          <button type="button" class="btn btn-outline-light btn-block" (click)="open(addBookCopiesModal, null)">Add
             Book Copies</button>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -54,7 +55,6 @@
         <td>{{ b.title }}</td>
         <td>{{ b.branchName }}</td>
         <td>{{ b.noOfCopies}}</td>
-        
         <td><button type="button" class="btn btn-outline-dark btn-block" (click)="(open(updateBookCopiesModal, b))">Edit</button></td>
       </tr>
     </tbody>
