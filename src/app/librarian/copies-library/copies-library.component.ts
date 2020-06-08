@@ -232,7 +232,7 @@ export class CopiesLibraryComponent implements OnInit {
       this.branchName = obj.branchName,
       this.title = obj.title,
       this.updateBookCopiesForm = this.fb.group({
-        noOfCopies: obj.noOfCopies,
+        noOfCopies: [obj.noOfCopies, [Validators.required, Validators.min(0)]],
         branchId: obj.branchId,
         bookId: obj.bookId,
       }),
@@ -241,7 +241,7 @@ export class CopiesLibraryComponent implements OnInit {
         branchId: obj.branchId,
         bookId: obj.bookId,
         title: obj.title,
-        noOfCopies: obj.noOfCopies,
+        noOfCopies: [obj.noOfCopies, [Validators.required, Validators.min(0)]],
       })
     }else{
       this.branchName = "",

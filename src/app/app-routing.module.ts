@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdministratorComponent } from "./administrator/administrator.component";
 import { BorrowerComponent } from "./borrower/borrower.component";
+import { BorrowerBookComponent } from "./borrower/borrower-book/borrower-book.component";
+import { BorrowerBookListComponent } from "./borrower/borrower-book-list/borrower-book-list.component";
 import { LibrarianComponent } from "./librarian/librarian.component";
 import { HomeComponent } from "./home/home.component";
 import { LmserrorComponent } from "./lmserror/lmserror.component";
@@ -67,6 +69,14 @@ const routes: Routes = [
         component: BorrowerComponent,
       },
       {
+        path: "lms/borrower/books",
+        component: BorrowerBookComponent,
+      },
+      {
+        path: "lms/borrower/books/list",
+        component: BorrowerBookListComponent,
+      },
+      {
         path: "lms/librarian",
         component: LibrarianComponent,
       },
@@ -78,10 +88,10 @@ const routes: Routes = [
         path: "lms/librarian/copies",
         component: CopiesLibraryComponent,
       },
-      // {
-      //   path: "**",
-      //   component: LmserrorComponent,
-      // },
+      {
+        path: "**",
+        component: LmserrorComponent,
+      },
     ]
   }
 ];

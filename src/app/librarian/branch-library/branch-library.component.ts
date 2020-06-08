@@ -134,8 +134,8 @@ export class BranchLibraryComponent implements OnInit {
       this.branchName = obj.branchName,
       this.updateBranchForm = this.fb.group({
         branchId: obj.branchId,
-        branchName: obj.branchName,
-        branchAddress: obj.branchAddress,
+        branchName: [obj.branchName, [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
+        branchAddress: [obj.branchAddress, [Validators.required, Validators.minLength(9), Validators.maxLength(45)]]
       });
     }else{
       this.branchName = "",
