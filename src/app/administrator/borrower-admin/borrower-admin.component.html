@@ -57,7 +57,7 @@
 
   <!-- pagination -->
   <div class="ds-l-row ds-u-margin-top--3">
-    <div class="ds-l-col--9">
+    <div class="pagination justify-content-center">
       <ngb-pagination [collectionSize]="totalBorrowers" [(page)]="pager.currentPage" [maxSize]="5"
         [boundaryLinks]="true" (pageChange)="setPage($event)"></ngb-pagination>
     </div>
@@ -77,13 +77,48 @@
         <div class="modal-body">
           <div class="form-group">
             <p>Name:
-              <input class="form-control" id="name" formControlName="name" /></p>
+              <input class="form-control" id="name" formControlName="name" [ngClass]="{
+                'is-invalid': updateBorrowerForm.controls['name'].errors
+              }" /></p>
+            <div *ngIf="updateBorrowerForm.controls['name'].errors" class="error-msg">
+              <div [hidden]="
+                  !updateBorrowerForm.controls['name'].errors.required
+                ">
+                Name is required
+              </div>
+              <div [hidden]="
+              updateBorrowerForm.controls['name'].errors.maxLength ||
+              updateBorrowerForm.controls['name'].errors.minLength
+                ">
+                Name should be between 3-45 chars in length
+              </div>
+            </div>
 
             <p>Address:
-              <input class="form-control" id="address" formControlName="address" /></p>
+              <input class="form-control" id="address" formControlName="address" [ngClass]="{
+                'is-invalid': updateBorrowerForm.controls['address'].errors
+              }" /></p>
+            <div *ngIf="updateBorrowerForm.controls['address'].errors" class="error-msg">
+              <div [hidden]="
+              updateBorrowerForm.controls['address'].errors.maxLength ||
+              updateBorrowerForm.controls['address'].errors.minLength
+                ">
+                Address should be between 3-45 chars in length
+              </div>
+            </div>
 
             <p>Phone:
-              <input class="form-control" id="phone" formControlName="phone" /></p>
+              <input class="form-control" id="phone" formControlName="phone" [ngClass]="{
+                'is-invalid': updateBorrowerForm.controls['phone'].errors
+              }" /></p>
+            <div *ngIf="updateBorrowerForm.controls['phone'].errors" class="error-msg">
+              <div [hidden]="
+              updateBorrowerForm.controls['phone'].errors.maxLength ||
+              updateBorrowerForm.controls['phone'].errors.minLength
+                ">
+                Phone should be between 10-45 chars in length
+              </div>
+            </div>
 
           </div>
         </div>

@@ -65,11 +65,7 @@ export class PublisherComponent implements OnInit {
 
   initializeFormGroup() {
     this.updatePublisherForm = new FormGroup({
-      publisherName: new FormControl(this.publisherName, [
-        Validators.required,
-        Validators.maxLength(45),
-        Validators.minLength(3),
-      ]),
+      publisherName: new FormControl(this.publisherName),
       publisherId: new FormControl(this.publisherId),
       publisherAddress: new FormControl(this.publisherAddress),
       publisherPhone: new FormControl(this.publisherPhone)
@@ -179,16 +175,16 @@ export class PublisherComponent implements OnInit {
     if (obj !== null) {
       this.updatePublisherForm = this.fb.group({
         publisherId: obj.publisherId,
-        publisherName: obj.publisherName,
-        publisherAddress: obj.publisherAddress,
-        publisherPhone: obj.publisherPhone
+        publisherName: [obj.publisherName, [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
+        publisherAddress: [obj.publisherAddress, [Validators.minLength(3), Validators.maxLength(45)]],
+        publisherPhone: [obj.publisherPhone, [Validators.minLength(10), Validators.maxLength(45)]]
       })
     } else {
       this.updatePublisherForm = this.fb.group({
         publisherId: null,
-        publisherName: "",
-        publisherAddress: null,
-        publisherPhone: null
+        publisherName: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
+        publisherAddress: ["", [Validators.minLength(3), Validators.maxLength(45)]],
+        publisherPhone: ["", [Validators.minLength(10), Validators.maxLength(45)]]
       })
     }
 

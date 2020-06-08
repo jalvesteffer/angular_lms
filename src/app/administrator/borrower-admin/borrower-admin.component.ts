@@ -69,11 +69,7 @@ export class BorrowerAdminComponent implements OnInit {
 
   initializeFormGroup() {
     this.updateBorrowerForm = new FormGroup({
-      name: new FormControl(this.name, [
-        Validators.required,
-        Validators.maxLength(45),
-        Validators.minLength(3),
-      ]),
+      name: new FormControl(this.name),
       cardNo: new FormControl(this.cardNo),
       address: new FormControl(this.address),
       phone: new FormControl(this.phone)
@@ -183,16 +179,16 @@ export class BorrowerAdminComponent implements OnInit {
     if (obj !== null) {
       this.updateBorrowerForm = this.fb.group({
         cardNo: obj.cardNo,
-        name: obj.name,
-        address: obj.address,
-        phone: obj.phone
+        name: [obj.name, [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
+        address: [obj.address, [Validators.minLength(3), Validators.maxLength(45)]],
+        phone: [obj.phone, [Validators.minLength(10), Validators.maxLength(45)]]
       })
     } else {
       this.updateBorrowerForm = this.fb.group({
         cardNo: null,
-        name: "",
-        address: null,
-        phone: null
+        name: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
+        address: ["", [Validators.minLength(3), Validators.maxLength(45)]],
+        phone: ["", [Validators.minLength(10), Validators.maxLength(45)]]
       })
     }
 

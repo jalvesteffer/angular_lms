@@ -55,7 +55,7 @@
 
   <!-- pagination -->
   <div class="ds-l-row ds-u-margin-top--3">
-    <div class="ds-l-col--9">
+    <div class="pagination justify-content-center">
       <ngb-pagination [collectionSize]="totalBranches" [(page)]="pager.currentPage" [maxSize]="5" [boundaryLinks]="true"
         (pageChange)="setPage($event)"></ngb-pagination>
     </div>
@@ -93,7 +93,17 @@
             </div>
 
             <p>Address:
-              <input class="form-control" id="branchAddress" formControlName="branchAddress" /></p>
+              <input class="form-control" id="branchAddress" formControlName="branchAddress" [ngClass]="{
+                'is-invalid': updateBranchForm.controls['branchAddress'].errors
+              }" /></p>
+            <div *ngIf="updateBranchForm.controls['branchAddress'].errors" class="error-msg">
+              <div [hidden]="
+                updateBranchForm.controls['branchAddress'].errors.maxLength ||
+                updateBranchForm.controls['branchAddress'].errors.minLength
+                  ">
+                Address should be between 3-45 chars in length
+              </div>
+            </div>
 
           </div>
         </div>
