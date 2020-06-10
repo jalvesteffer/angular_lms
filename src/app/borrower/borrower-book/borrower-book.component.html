@@ -1,10 +1,9 @@
-<div class="card h-100" style="margin-top:10px; width:200px;">
-  <img src="{{ data.imageUrl }}" onerror="this.src='https://picsum.photos/id/1044/200/125'" class="card-img-top"
-    alt="{{ data.imageUrl }}" />
-  <div class="card-body h-500">
-    <h5 class="card-title">{{ data.title }}</h5>
+<div class="card" style="margin-top:10px;">
+  <div class="card-body">
+    <h5 class="card-title" (click)="clickBook()">{{ data.title }}</h5>
     <p class="card-text">
       branch: {{ data.branchId }}, copies: {{ data.noOfCopies }}
     </p>
+    <button type="button" class="btn btn-primary" (click)="clickBook()">Borrow</button>
   </div>
 </div>

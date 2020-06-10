@@ -1,0 +1,4 @@
+<h3>My Books</h3>
+<div>
+  <app-borrower-loan *ngFor="let l of loans" [loan]="l" (loanClicked)="onClicked($event)"></app-borrower-loan>
+</div>

@@ -1,3 +1,4 @@
+<h3>Available Books</h3>
 <div>
-  <app-borrower-book *ngFor="let b of books" [book]="b"></app-borrower-book>
+  <app-borrower-book *ngFor="let b of books" [book]="b" (bookClicked)="onClicked($event)"></app-borrower-book>
 </div>

@@ -16,7 +16,7 @@ export class Book {
     this.noOfCopies = noOfCopies;
     this.title = title;
     this.imageUrl = `https://picsum.photos/id/${
-      Math.floor(Math.random() * 90) + 1001
+      this.bookId + 300
     }/200/125`;
   }
 }

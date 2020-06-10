@@ -34,6 +34,9 @@ import { GenreSortPipe } from './common/genre-sort.pipe';
 import { BorrowerSortPipe } from './common/borrower-sort.pipe';
 import { BorrowerBookComponent } from './borrower/borrower-book/borrower-book.component';
 import { BorrowerBookListComponent } from './borrower/borrower-book-list/borrower-book-list.component';
+import { BorrowerFormComponent } from './borrower/borrower-form/borrower-form.component';
+import { LoanListComponent } from './borrower/loan-list/loan-list.component';
+import { BorrowerLoanComponent } from './borrower/borrower-loan/borrower-loan.component';
 
 @NgModule({
 
@@ -64,6 +67,9 @@ import { BorrowerBookListComponent } from './borrower/borrower-book-list/borrowe
     BorrowerSortPipe,
     BorrowerBookComponent,
     BorrowerBookListComponent,
+    BorrowerFormComponent,
+    LoanListComponent,
+    BorrowerLoanComponent,
   ],
   imports: [
     BrowserModule,
